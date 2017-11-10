@@ -1,0 +1,415 @@
+<div class="body-coatiner">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+  <header class="click-through">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" (click)="openSidenav()" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+            aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">
+            <img src="assets/images/kupukoo.png" width="60px" style="float:left;">
+            <h2 class="kupu">
+              <span class="whitey">Kupu</span>koo</h2>
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="#home">Home</a>
+            </li>
+            <li>
+              <a href="#features">Features</a>
+            </li>
+            <li>
+              <a href="#download">Download App</a>
+            </li>
+            <li>
+              <a href="#coverage">Coverage</a>
+            </li>
+            <li>
+              <a href="#testimonials">Testimonials</a>
+            </li>
+            <li>
+              <a href="#faq">FAQ</a>
+            </li>
+            <li>
+              <a href="#irene">Meet Irene</a>
+            </li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+    <section class="hero click-through" id="home">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-offset-1 col-md-10">
+            <div class="hero-text">
+              <h1>Introducing P2P
+                <br>
+                <span class="big-title">SMARTPHONE INSURANCE</span>
+              </h1>
+              <h2>for you</h2>
+              <h6>Insurance is now Social.</h6>
+              <h6 *ngIf="message">{{message}}</h6>
+              <button href="#" *ngIf="!loading && !isLogged" (click)="loginWithFB()" class="btn btn-primary">LOGIN TO CLAIM</button>
+              <a [routerLink]="['/dashboard']" *ngIf="isLogged" class="btn btn-primary">GO TO DASHBOARD</a>
+            </div>
+          </div>
+
+        </div>
+        <!-- Hero Row End -->
+      </div>
+      <!-- Hero Container End -->
+    </section>
+    <!-- Hero Section End -->
+
+  </header>
+  <!-- Header End -->
+
+
+  <section class="clients">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 col-sm-12">
+          <h6>Our partners</h6>
+        </div>
+        <div class="push-right">
+          <div class="col-md-3 col-sm-3">
+            <img src="assets/images/client-logos/client-1.png" class="img-responsive" alt="Client Logo">
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <img src="assets/images/client-logos/client-2.png" class="img-responsive" alt="Client Logo">
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <img src="assets/images/client-logos/client-3.png" class="img-responsive" alt="Client Logo">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="features" id="features">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-6">
+          <div class="features-title">
+            <h2>Key Features</h2>
+            <h5>An App to protect your phone socially</h5>
+          </div>
+          <!-- End Features Title -->
+          <div class="features-list">
+
+            <img src="assets/images/icons/AI.png" width="70px" alt="machine learning" style="padding-top:10px;">
+            <div class="feat">
+              <h4>Methodology</h4>
+              <p>Kupukoo will use advanced Machine learning algorithms for Policy underwriting, claims fraud prevention and
+                identity intelligence.
+              </p>
+            </div>
+          </div>
+          <!-- End Features List 1 -->
+          <div class="features-list">
+
+            <img src="assets/images/icons/claim.png" width="70px" alt="claims" style="padding-top:10px;">
+            <div class="feat">
+              <h4>Claim decisions</h4>
+              <p>Once a group is formed, it can decide if they would like to administer claims through voting or let the BOT
+                take claims decisions.</p>
+            </div>
+          </div>
+          <!-- End Features List 2 -->
+          <div class="features-list">
+
+            <img src="assets/images/icons/group.png" width="70px" alt="group allocation" style="padding-top:10px;">
+            <div class="feat">
+              <h4>Group Allocation</h4>
+              <p>For individual customers who are not part of any interest groups, the Kupukoo BOT will use Look-alike modelling
+                and clustering techniques for appropriate virtual group allocation</p>
+            </div>
+          </div>
+          <div class="features-list">
+
+            <img src="assets/images/icons/giveback.png" width="70px" alt="giveback" style="padding-top:10px;">
+            <div class="feat">
+              <h4>Givebacks</h4>
+              <p>The customers will be repaid contributions on expiry of policy</p>
+            </div>
+          </div>
+
+          <!-- End Features List 4 -->
+        </div>
+      </div>
+      <!-- End Features Row -->
+    </div>
+    <!-- End Features Container -->
+  </section>
+  <!-- End Features Section -->
+
+
+
+  <section class="contact" id="download">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Get A Faster and Personalized Policy for your Smartphone!</h2>
+
+          <div class="col-md-offset-4 col-md-4">
+            <!--<a class="btn btn-primary btn-lg btn-block" href="#home">GET YOUR POLICY</a> -->
+            <br />
+            <a class="btn btn-lg btn-success big-btn android-btn" href="#">
+              <img width="80px" class="pull-left" src="assets/images/google_play_04.png">
+              <div class="btn-text">
+                <small>Available on</small>
+                <br>
+                <strong>Google Play</strong>
+              </div>
+            </a>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services" id="coverage">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+          <div class="services-title">
+            <h2>We Cover for</h2>
+
+            <p>Kupukoo - a self-service, Peer to peer INSURETECH platform that lets customers use their digital identity to
+              form online networks, share risks and buy insurance products of their choice. Social media will act as the
+              distribution channel.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="services-list">
+        <div class="col-md-4  col-sm-6">
+          <div class="list">
+            <img src="assets/images/cover/accident.png" alt="car icon">
+            <h4>Accidental Damage</h4>
+            <p>Our Accidental Damage plan covers any damage caused to your phone after an accidental drop or fall. All you require
+              is to upload a video testimonial describing the event to file the claim.</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="list">
+            <img src="assets/images/cover/liquid.png" alt="car icon">
+            <h4>Liquid Damage</h4>
+            <p>We cover liquid damage for any sudden or accidental discharge of water or liquid is caused in your phone. You
+              have to upload a video explaining the incident in order to file claim.</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="list">
+            <img src="assets/images/cover/burglary.png" alt="car icon">
+            <h4>Burglary</h4>
+            <p>Our policy covers the loss of your phone caused by burglars by entering/breaking-in your property unlawfully.
+              We just require the evidence/photo of break-in to file your claim.</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="list">
+            <img src="assets/images/cover/theft.png" alt="car icon">
+            <h4>Theft</h4>
+            <p>We also cover insurance against loss or damage of smartphone caused by the unlawful taking of your smartphone.
+              For filing a claim you just need to upload a copy of Police Report.</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="list">
+            <img src="assets/images/cover/stolen.png" alt="car icon">
+            <h4>Stolen</h4>
+            <p>We cover the insurance against loss by theft of phone from the person or immediate presence of the possessor.
+              You have to provide the proof of body injury or medical report to file claim.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <section class="reviews" id="testimonials">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+          <div class="reviews-title">
+            <h2>What Kupukoo Users Say</h2>
+            <p>Listen to the voices around you</p>
+          </div>
+        </div>
+      </div>
+      <div class="row reviews-list-row">
+        <div class="col-md-4">
+          <div class="reviews-list">
+            <img src="assets/images/reviews/user-3.jpg" class="img-thumbnail" alt="client">
+            <h4>Fousiya asam</h4>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <p>Amazing user experience! Never thought I'd buy PHONE insurance and this app made it inclredibly easy!</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="reviews-list">
+            <img src="assets/images/reviews/user-2.jpg" class="img-thumbnail" alt="client">
+            <h4>Ricky nazzar</h4>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <p>This is the best insurance company ever. It took me only 50 seconds to buy a policy, and my coverage is higher.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="reviews-list">
+            <img src="assets/images/reviews/user-1.jpeg" class="img-thumbnail" alt="client">
+            <h4>Jezz</h4>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <span class="fa fa-star" aria-hidden="true"></span>
+            <p>It was very easy to get a smartphone insurance from Kupukoo. Support Team is Very Friendly, They cleared all
+              my doubts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+          <div class="faq-title">
+            <h2>Frequently Asked Questions</h2>
+            <p>We have answers for your questions, check them all.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="faq-list">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-1 col-sm-2 col-xs-2">
+              <h2>Q
+                <br>A</h2>
+            </div>
+            <div class="qa">
+              <div class="col-md-11 col-sm-10 col-xs-10">
+                <h6>Why should I choose Kupukoo?</h6>
+                <p>Kupukoo is a Smartphone P2P Insurance company that is transforming the business model of Insurance. Kupukoo platform
+                  lets customers use their digital identity to form online networks, share risks and buy insurance products
+                  of their choice.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-1 col-sm-2 col-xs-2">
+              <h2>Q
+                <br>A</h2>
+            </div>
+            <div class="qa">
+              <div class="col-md-11 col-sm-10 col-xs-10">
+                <h6>How P2P Insurance works?</h6>
+                <p>Customers will be a part of a group, and if no claims are made by the customer or any of the members in their
+                  group, then each member of the group receives cashback. If claims are made, there will be no cashback for
+                  the customer and their connections. Kupukoo customers don’t ever have to pay more than the premium.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-1 col-sm-2 col-xs-2">
+              <h2>Q
+                <br>A</h2>
+            </div>
+            <div class="qa">
+              <div class="col-md-11 col-sm-10 col-xs-10">
+                <h6>What if I want to cancel my policy?</h6>
+                <p>You can cancel your policy at any time through our app or website. Further canceling your policy will eliminate
+                  any potential giveback associated with your policy. And if you ever want to come back, we’ll create a new
+                  policy for you. Know that our prices change from time to time, so your new policy may come with a different
+                  rate.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-1 col-sm-2 col-xs-2">
+              <h2>Q
+                <br>A</h2>
+            </div>
+            <div class="qa">
+              <div class="col-md-11 col-sm-10 col-xs-10">
+                <h6>Does this policy only cover new Smartphones?</h6>
+                <p>Yes, Insurance cover is restricted to only new purchases.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-hero" id="irene">
+    <div class="container">
+      <div class="row">
+        <h2>Want to know more about
+          <span style="color:#fa3a61 !important;">Kupu</span>koo?</h2>
+        <h6>Ask our personal assistant, Irene to know everything about Kupukoo.</h6>
+        <div class="col-md-offset-4 col-md-4">
+          <a class="btn btn-primary btn-lg btn-block" href="#home">MEET IRENE</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-sm-8">
+          <p>Made With
+            <span class="fa fa-heart" aria-hidden="true"></span> in Indonesia</p>
+        </div>
+        <div class="col-md-6 col-sm-4">
+          <div class="social">
+            <a href="#">
+              <i class="fa fa-facebook" aria-hidden="true"></i>
+            </a>
+            <a href="#">
+              <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+            <a href="#">
+              <i class="fa fa-linkedin" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

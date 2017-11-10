@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+.sidebar .logo {
+	
+	background: #3a0e17!important;
+	text-align: center;
+}
+
+.sidebar .logo, .off-canvas-sidebar .logo {
+
+height :325px !important;
+	font-family: 'Raleway', sans-serif !important;
+}
+
+.sidebar .logo, .off-canvas-sidebar .logo p {
+	
+	text-align: center;
+	font-family: 'Raleway', sans-serif !important;
+}
+
+.sidebar[data-color="kupu-pink"] .nav li a.active, .off-canvas-sidebar[data-color="kupu-pink"] .nav li a.active {
+	color: white;
+	background-color: #ff3866;
+}
+
+
+.sidebar h2.kupu {
+    color: #fff !important;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    /* border: solid 2px #fff; */
+    
+	font-size: 30px;
+    color: #fa3a61;
+    font-weight: 700;
+    line-height: 30px;
+	font-family: 'Raleway', sans-serif !important;
+	float: left;
+	margin-top: 16px;
+}
+
+
+.whitey {
+    color: #ff3866 !important;
+	font-family: 'Raleway', sans-serif;
+}
+
+.sidebar .nav li:first-child>a,
+.off-canvas-sidebar .nav li:first-child>a {
+    margin: 0 11px;
+}
+
+.sidebar .nav li>a,
+.off-canvas-sidebar .nav li>a {
+    margin: 10px 15px 0;
+    border-radius: 3px;
+    color: #3C4858;
+}

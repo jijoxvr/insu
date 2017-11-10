@@ -1,0 +1,12 @@
+<div class="row">
+  <video  #video class="video col-xs-12 col-md-6">
+    <!-- <video #video class="video"></video> -->
+  </video>
+  <div class="col-xs-12 col-md-6">
+    <div class="video-controls">
+      <button *ngIf="!isRecording" mat-raised-button color="primary" (click)="startRecording()"> Record </button>
+      <button *ngIf="isRecording" mat-raised-button color="primary" (click)="stopRecording()"> Stop</button>
+      <button *ngIf="isRecordingCompleted" mat-raised-button color="primary" (click)="submitRecording()"> Submit</button>
+    </div>
+  </div>
+</div>
