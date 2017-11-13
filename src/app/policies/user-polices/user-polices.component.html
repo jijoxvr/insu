@@ -1,44 +1,63 @@
-<div class="card card-nav-tabs">
+<div *ngIf="isLoading" class="card card-nav-tabs">
+    <div style="padding: 42px 20px;" class="card-content">
+      <app-loader></app-loader>
+    </div>
+</div>
+<div *ngIf="isResolved && policies.length == 0" class="card card-nav-tabs">
+    <div style="padding: 42px 20px;" class="card-content">
+      You dont have any policies
+    </div>
+</div>
+<div *ngIf="isResolved && policies.length > 0" class="card card-nav-tabs">
   <div class="card-header" data-background-color="kupu-pink">
     <div class="nav-tabs-navigation">
       <div class="nav-tabs-wrapper">
         <span class="nav-tabs-title">My Policies :</span>
         <ul class="nav nav-tabs" data-tabs="tabs">
-          <li class="active">
-            <a href="#policy1" data-toggle="tab">
-              <i class="material-icons">smartphone</i> Redmi note 4
+          <li *ngIf="policies.length > 0" class="active">
+            <a style="padding: 4px" href="#policy1" data-toggle="tab">
+              <i class="material-icons">smartphone</i>{{policies[0].Device}}
               <div class="ripple-container"></div>
             </a>
           </li>
-          <li class="">
-            <a href="#policy2" data-toggle="tab">
-              <i class="material-icons">smartphone</i> samsung j7 prime
-              <div class="ripple-container"></div>
-            </a>
+          <li *ngIf="policies.length > 1">
+              <a style="padding: 4px" href="#policy2" data-toggle="tab">
+                <i class="material-icons">smartphone</i>{{policies[1].Device}}
+                <div class="ripple-container"></div>
+              </a>
           </li>
-
+          <li style="float: right" *ngIf="policies.length > 2" class="dropdown">
+              <a style="padding: 4px;" href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                 <i class="material-icons">keyboard_arrow_down</i>
+                 <p class="hidden-lg hidden-md">More</p>
+              </a>
+              <ul *ngFor="let subItem of morePolicies; let i = index"  class="dropdown-menu">
+                  <li><a style="background-color: #fa3a61;
+                    color: #FFFFFF;" data-toggle="tab" href="#policy{{i+3}}">{{subItem.Device}}</a></li>
+              </ul>
+          </li>
         </ul>
       </div>
     </div>
   </div>
   <div class="card-content">
     <div class="tab-content">
-      <div class="tab-pane active" id="policy1">
+      <div *ngFor="let item of policies; let i = index;" class="tab-pane {{i == 0 ? 'active': '' }}" id="policy{{i+1}}">
         <div class="col-md-6">
           <div class="card" style="text-align:center;">
             <div class="card-header card-chart" data-background-color="kupu-pink" style="padding-top:47px;">
               <p class="category">Premium Amount :
                 <br />
-                <span style="font-size:30px;font-weight:700;color:#fff;"> Rp 8562200</span>
+                <span style="font-size:22px;font-weight:700;color:#fff;">{{item.PremiumAmount | currency:defaultCurrency:true:'.0-0'}}</span>
               </p>
             </div>
             <div class="card-content">
-              <h4 class="title">Redmi Note 4</h4>
-              <p class="category">Current value : Rp 1800050</p>
+              <h4 class="title">{{item.Device}}</h4>
+              <p class="category">Current value : {{item.PremiumAmount | currency:defaultCurrency:true:'.0-0'}}</p>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">access_time</i> Purchased date : 22-11-2017
+                <i class="material-icons">access_time</i> {{item.StartDate | date:"MM/dd/yy"}}
               </div>
             </div>
           </div>
@@ -51,17 +70,17 @@
         <div class="col-md-12">
             <div class="detailcontainer" style="width:99%;text-align:center;margin:0 auto;padding:0;height:100px;">
                 <a href="#">
-                  <div class="details" data-background-color="red">
+                  <div class="details" data-background-color="kupu-pink">
                     <i class="material-icons">smartphone</i>
                   </div>
                 </a>
                 <a href="#">
-                  <div class="details" data-background-color="red">
+                  <div class="details" data-background-color="kupu-pink">
                     <i class="fa fa-dollar"></i>
                   </div>
                 </a>
                 <a href="#">
-                  <div class="details" data-background-color="red">
+                  <div class="details" data-background-color="kupu-pink">
                     <i class="fa fa-times"></i>
                   </div>
                 </a>
@@ -69,64 +88,8 @@
         </div>
       </div>
 
-      <div class="tab-pane" id="policy2">
-        <div class="col-md-6">
-          <div class="card" style="text-align:center;">
-            <div class="card-header card-chart" data-background-color="red" style="padding-top:47px;">
-              <p class="category">Premium Amount :
-                <br />
-                <span style="font-size:30px;font-weight:700;color:#fff;"> Rp 5560000</span>
-              </p>
-            </div>
-            <div class="card-content">
-              <h4 class="title">Samsung j7 Prime</h4>
-              <p class="category">Current value : Rp 2352360</p>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">access_time</i> Purchased date : 10-12-2017
-              </div>
-            </div>
-
-
-          </div>
-
-          <div class="detailcontainer" style="width:99%;text-align:center;margin:0 auto;padding:0;height:100px;">
-            <a href="#">
-              <div class="details" data-background-color="red">
-
-                <i class="material-icons">smartphone</i>
-              </div>
-
-            </a>
-
-            <a href="#">
-              <div class="details" data-background-color="red">
-
-                <i class="fa fa-dollar"></i>
-              </div>
-            </a>
-
-            <a href="#">
-              <div class="details" data-background-color="red">
-
-                <i class="fa fa-times"></i>
-              </div>
-            </a>
-          </div>
-
-        </div>
-
-        <div class="col-md-6">
-          <div class="phone">
-            <img class="img-responsive" src="../assets/img/samsung.png">
-          </div>
-
-        </div>
-
-      </div>
-
       <!--pane ends here-->
     </div>
   </div>
 </div>
+

@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Router } from "@angular/router";
-import { AjaxService } from '../shared';
+import { AjaxService } from '../shared/ajax-api/ajax.service';
 import { APIUrls } from '../app-config';
 import * as moment from  "moment";
 import { FacebookService, InitParams, LoginOptions, LoginResponse } from 'ngx-facebook';

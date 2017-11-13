@@ -8,19 +8,23 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { LayoutContainerComponent } from './layout-container/layout-container.component';
 import { DashboardModule } from "../dashboard/dashboard.module";
+import { UserProfileComponent } from "../user-profile/user-profile.component";
+import { IreneModule } from "../irene/irene.module";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     DashboardModule,
-    LayoutRouting
+    LayoutRouting,
+    IreneModule
   ],
   declarations: [
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
-    LayoutContainerComponent
+    LayoutContainerComponent,
+    UserProfileComponent
   ],
   exports: [
     FooterComponent,

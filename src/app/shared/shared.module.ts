@@ -10,6 +10,7 @@ import { JsonApiService } from "./ajax-api/json-api.service";
 import { WebStorageService } from "./ajax-api/web-storage.service";
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
 import { TimeLineComponent } from './time-line/time-line.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   imports: [
@@ -18,12 +19,14 @@ import { TimeLineComponent } from './time-line/time-line.component';
   declarations: [
     VideoRecordComponent,
     ByteFormatPipe,
-    TimeLineComponent
+    TimeLineComponent,
+    LoaderComponent
   ],
   exports: [
     VideoRecordComponent,
     ByteFormatPipe,
-    TimeLineComponent
+    TimeLineComponent,
+    LoaderComponent
   ],
   providers:[
     AjaxService,

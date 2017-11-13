@@ -4,6 +4,7 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { ClaimWithIreneComponent } from '../irene/claim-with-irene/claim-with-irene.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TableListComponent } from '../table-list/table-list.component';
 import { TypographyComponent } from '../typography/typography.component';
@@ -16,8 +17,9 @@ import {LayoutContainerComponent} from "./layout-container/layout-container.comp
 const routesTest:Routes = [{
     path: '', component: LayoutContainerComponent,
     children: [
+        { path: 'irene',      component: ClaimWithIreneComponent },
         { path: 'dashboard',      component: DashboardComponent },
-        { path: 'user-profile',   component: DashboardComponent },
+        { path: 'user-profile',   component: UserProfileComponent },
         { path: '',               redirectTo: 'dashboard', pathMatch: 'full' },
         
     ]}

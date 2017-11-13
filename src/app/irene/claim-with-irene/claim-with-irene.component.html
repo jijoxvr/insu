@@ -1,0 +1,48 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div id="frame">
+
+      <div class="chatcontent">
+        <div class="contact-profile">
+          <img src="../assets/images/irene.png" alt="" />
+          <p>Irene</p>
+        </div>
+        <div class="messages">
+          <ul>
+            <li *ngFor="let msg of messages" class="{{msg.type}}">
+              <img src="../assets/images/irene.png" alt="" />
+              
+              <p>
+                <button (click)="undoChat(msg.undo)" *ngIf="msg.undo" style="background:#ff3866;" class="btn btn-xs">
+                    <i class="fa fa-trash"></i>
+                </button>
+                {{msg.text}}
+              </p>
+            </li>
+          </ul>
+          <ul>
+            <li *ngIf="userActions.purpose" class="send" style="padding-top: 60px;text-align: center;">
+              <button (click)="onClaimChoice()" class="btn chat-button btn-primary">Claim</button>
+              <button class="btn chat-button btn-primary">Activate</button>
+            </li>
+            <li *ngIf="userActions.claimType" class="send" style="padding-top: 60px;text-align: center;">
+                <button (click)="onClaimTypeChoice(1)" class="btn chat-button btn-primary">Damage</button>
+                <button (click)="onClaimTypeChoice(2)" class="btn chat-button btn-primary">Lost</button>
+            </li>
+          </ul>
+        </div>
+       
+      
+        <div class="message-input">
+          <div class="wrap">
+            <input type="text" placeholder="Type your address..." />
+            <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
+            <button class="submit">
+              <img src="../assets/images/send.png" width="66px">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -57,3 +57,17 @@ height :325px !important;
     border-radius: 3px;
     color: #3C4858;
 }
+
+@media only screen and (min-width : 1224px) {
+    body{
+        zoom: .8;
+    }
+}
+@media only screen and (min-width : 1224px) {
+    #frame p, #frame button{
+        font-size: 18px;
+    }
+}
+.wrapper{
+    height: auto;
+}

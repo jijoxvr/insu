@@ -170,5 +170,19 @@ export const AppLabels = { // modify this for changing laguage
 
     'labelForPolicyStatus': {
         'paymementPending' : '',
+    },
+
+    'irene': {
+        'irene1': 'Hi USER_NAME',
+        'irene2' : 'How may i assist you?',
+        'irene3' : 'It will take 24 hrs to process your claim',
+        'irene4' : 'What hapended to you mobile?',
+
+        'rep1': 'I would like to file a claim',
+        'rep2':{
+            'lost' : 'I had lost my phone',
+            'damage' : 'A damage has occured'
+        } 
     }
 }
+
