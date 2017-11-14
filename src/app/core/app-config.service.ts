@@ -14,7 +14,8 @@ export class AppConfigService {
   claimReason = {
     'DAMAGE': 'DMG',
     'LOST': 'LST',
-    'ACCIDENTAL_DAMAGE': 'ACDMG',
+    'ACCIDENTAL_DAMAGE_REPLACE': 'ACDR',
+    'ACCIDENTAL_DAMAGE_REPAIR': 'ACDMG',
     'LIQUID_DAMAGE': 'LQDMG',
     'THEFT': 'TFT',
     'BURGLARY': 'BRG',

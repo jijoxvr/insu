@@ -174,15 +174,15 @@ export const AppLabels = { // modify this for changing laguage
 
     'irene': {
         'irene1': 'Hi USER_NAME',
-        'irene2' : 'How may i assist you?',
-        'irene3' : 'It will take 24 hrs to process your claim',
-        'irene4' : 'What hapended to you mobile?',
+        'irene2': 'How may i assist you?',
+        'irene3' : 'Please choose your policy, I will help you to get this claim sorted out in no time',
+        'irene4' : 'Tell me USER_NAME, what really happened?',
+        'irene5' : 'Sorry to hear that.. What you are claiming?',
 
         'rep1': 'I would like to file a claim',
-        'rep2':{
-            'lost' : 'I had lost my phone',
-            'damage' : 'A damage has occured'
-        } 
+        'rep2': 'DEVICE_NAME',
+        'rep3': 'DAMAGE_TYPE',
+        
     }
 }
 

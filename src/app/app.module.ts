@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -37,6 +38,7 @@ export const firebaseConfig = {
 
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
     FormsModule,
