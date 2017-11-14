@@ -22,7 +22,7 @@
           </ul>
           <ul>
             <li *ngIf="userActions.purpose" class="send" style="padding-top: 60px;text-align: center;">
-              <button [@zoomInUp1]="''" (click)="onClaimChoice()" class="btn chat-button btn-primary">Claim</button>
+              <button *ngIf="userPolicies.length > 0" [@zoomInUp1]="''" (click)="onClaimChoice()" class="btn chat-button btn-primary">Claim</button>
               <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Activate</button>
             </li>
             <li *ngIf="userActions.claimType" class="send" style="padding-top: 60px;text-align: center;">

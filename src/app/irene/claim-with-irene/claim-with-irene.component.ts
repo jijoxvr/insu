@@ -69,7 +69,8 @@ export class ClaimWithIreneComponent implements OnInit {
   claimSubReason = [];
   
   claimReasonGrouped = {};
-  claimSubGrouped = {};
+  claimDamageTypeGrouped = {};
+  claimDamageSubTypeGrouped = {};
   claimIssueGrouped = {};
 
   constructor(public userServiceService: UserServiceService,
@@ -80,6 +81,7 @@ export class ClaimWithIreneComponent implements OnInit {
     this.claimConfig = appConfigService.claimReason;
     this.userServiceService.getUserInfo();
     this.loading = true;
+    this.userData.UserId = 10058
     let serverCall = [
       this.ajaxService.execute({
         method: 'POST', url: APIUrls.insuranceList,
@@ -212,7 +214,8 @@ export class ClaimWithIreneComponent implements OnInit {
 
     let claimMainReasonDict = {}
     let claimSubReasonDict = {}
-    let claimIssueDict = {}
+    let claimDamageTypeDict = {}
+    let claimDamageSubTypeDict = {}
     for (let item of data) {
       if (this.claimReasonGrouped[item.Issue_Id]){
         if(!claimSubReasonDict[item.Issue_Id][item.IssueSub_Id])
@@ -223,19 +226,37 @@ export class ClaimWithIreneComponent implements OnInit {
         claimSubReasonDict[item.Issue_Id][item.IssueSub_Id] = true;
         this.claimReasonGrouped[item.Issue_Id] = [{ value: { id: item.IssueSub_Id, code: item.IssueSub_Code }, label: item.IssueSub_Name }];
       }
-      // if(item.IssueDamageType_Id){
-      //   if(this.claimSubGrouped[item.IssueSub_Id]){
-      //     if(!claimIssueDict[item.IssueSub_Id][item.IssueDamageType_Id])
-      //       this.claimSubGrouped[item.IssueSub_Id].
-      //       push({ value: { id: item.IssueSub_Id, code: item.IssueSub_Code }, label: item.IssueSub_Name });
-      //   }else{
-      //     claimIssueDict[item.IssueSub_Id] = {}
-      //     claimIssueDict[item.IssueSub_Id][item.IssueDamageType_Id] = true;
-      //   }
-      // }
+      if(item.IssueDamageType_Id){
+        if(this.claimDamageTypeGrouped[item.IssueSub_Id]){
+          if(!claimDamageTypeDict[item.IssueSub_Id][item.IssueDamageType_Id])
+            this.claimDamageTypeGrouped[item.IssueSub_Id].
+            push({ value: { id: item.IssueDamageType_Id, code: item.IssueDamageType_Code }, label: item.IssueDamageType_Name });
+        }else{
+          claimDamageTypeDict[item.IssueSub_Id] = {};
+          claimDamageTypeDict[item.IssueSub_Id][item.IssueDamageType_Id] = true;
+          this.claimDamageTypeGrouped[item.IssueSub_Id] = 
+            [{ value: { id: item.IssueDamageType_Id, code: item.IssueDamageType_Code }, label: item.IssueDamageType_Name }];
+        }
+        if(item.IssueDamageTypeSub_Id){
+          if(this.claimDamageSubTypeGrouped[item.IssueDamageType_Id]){
+            if(!claimDamageSubTypeDict[item.IssueDamageType_Id][item.IssueDamageTypeSub_Id])
+              this.claimDamageSubTypeGrouped[item.IssueDamageType_Id].
+              push({ value: { id: item.IssueDamageTypeSub_Id, code: item.IssueDamageTypeSub_Code }, label: item.IssueDamageTypeSub_How });
+          }else{
+            claimDamageSubTypeDict[item.IssueSub_Id] = {};
+            claimDamageSubTypeDict[item.IssueDamageType_Id][item.IssueDamageTypeSub_Id] = true;
+            this.claimDamageSubTypeGrouped[item.IssueDamageType_Id] = 
+              [{ value: { id: item.IssueDamageTypeSub_Id, code: item.IssueDamageTypeSub_Code }, label: item.IssueDamageTypeSub_How }];
+          }
+        }
+      }
       
       claimMainReasonDict[item.Issue_Id] = { label: item.Issue_Name, code: item.Issue_Code };
     }
+
+    console.log(this.claimReasonGrouped)
+    console.log(this.claimDamageTypeGrouped)
+    console.log(this.claimDamageSubTypeGrouped)
     
     Object.keys(claimMainReasonDict).forEach(key => {
       this.claimMainReason.push({ value: { id: key, code: claimMainReasonDict[key].code }, label: claimMainReasonDict[key].label })
