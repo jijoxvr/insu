@@ -19,9 +19,10 @@
                 {{msg.text}}
               </p>
             </li>
-            <owl-date-time inline="true" [type]="'timer'"></owl-date-time>
           </ul>
           <ul>
+            <owl-date-time (onSelect)="onSelectTime($event)" [defaultMoment]="now" *ngIf="userActions.selectTime" inline="true" hourFormat='12' type="timer"></owl-date-time>
+            <owl-date-time (onSelect)="onSelectDate($event)" [defaultMoment]="now" *ngIf="userActions.selectDate" inline="true" hourFormat='12' type="calendar"></owl-date-time>
             <li *ngIf="userActions.purpose" class="send" style="padding-top: 60px;text-align: center;">
               <button *ngIf="userPolicies.length > 0" [@zoomInUp1]="''" (click)="onClaimChoice()" class="btn chat-button btn-primary">Claim</button>
               <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Activate</button>
@@ -31,13 +32,13 @@
               <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Deny</button>
             </li>
             <li *ngIf="userActions.claimType" class="send" style="padding-top: 60px;text-align: center;">
-                <button [@zoomInUp1]="checkAnimation(0, i)" [@zoomInUp2]="checkAnimation(1, i)" *ngFor="let reason of claimMainReason; let i = index" (click)="onClaimTypeChoice(reason)" class="btn chat-button btn-primary">{{reason.label}}</button>
+                <button [@zoomInUp1]="''" *ngFor="let reason of claimMainReason; let i = index" (click)="onClaimTypeChoice(reason)" class="btn chat-button btn-primary">{{reason.label}}</button>
             </li>
             <li *ngIf="userActions.claimReason" class="send" style="padding-top: 60px;text-align: center;">
-                <button [@zoomInUp1]="checkAnimation(0, i)" [@zoomInUp2]="checkAnimation(1, i)"  *ngFor="let reason of claimSubReason" (click)="onClaimReasonChoice(reason)" class="btn chat-button btn-primary border-button">{{reason.label}}</button>
+                <button [@zoomInUp1]="''"  *ngFor="let reason of claimSubReason" (click)="onClaimReasonChoice(reason)" class="btn chat-button btn-primary border-button">{{reason.label}}</button>
             </li>
             <li *ngIf="userActions.selectDamageType" class="send" style="padding-top: 60px;text-align: center;">
-              <button [@zoomInUp1]="checkAnimation(0, i)" [@zoomInUp2]="checkAnimation(1, i)"  *ngFor="let type of claimDamageType" (click)="onSelectDamageType(type, $event)" class="btn chat-button btn-primary border-button">{{type.label}}</button>
+              <button [@zoomInUp1]="''"  *ngFor="let type of claimDamageType" (click)="onSelectDamageType(type, $event)" class="btn chat-button btn-primary border-button">{{type.label}}</button>
             </li>
            
             <li *ngIf="userActions.warrantyConfirm" class="send" style="padding-top: 60px;text-align: center;">

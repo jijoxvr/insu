@@ -800,3 +800,33 @@ li .chat-button:nth-child(0n){
 :host ::ng-deep owl-date-time .owl-state-default{
   border: none!important;
 }
+:host ::ng-deep owl-date-time .owl-timer-wrapper{
+  background-color: rgb(238, 180, 194)!important;
+  border: 2px solid #ee3667!important;
+}
+:host ::ng-deep owl-date-time .owl-timer-control{
+  color: #ee3667!important;
+}
+:host ::ng-deep owl-date-time .owl-timer-dot{
+  background: #ee3667!important;
+}
+:host ::ng-deep owl-date-time .owl-timer-text{
+  /* width: 72%!important; */
+  height: 55%!important;
+}
+
+:host ::ng-deep owl-date-time .owl-meridian-btn{
+  color: #fff!important;
+  background-color: #ee3667!important;
+  border-color: #ee3667!important;
+  height: 55%!important;
+  width: 55%!important;
+  box-shadow: 0 14px 26px -12px rgba(250, 58, 97, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(250, 58, 97, 0.2);
+}
+:host ::ng-deep owl-date-time .owl-calendar tbody td.owl-calendar-selected{
+  background-color: #ee3667!important;
+}
+:host ::ng-deep owl-date-time .owl-calendar-wrapper{
+  color: #fff!important;
+  background-color: #ee3667!important;
+}

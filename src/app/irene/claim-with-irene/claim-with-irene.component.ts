@@ -46,6 +46,7 @@ declare var $: any;
 })
 export class ClaimWithIreneComponent implements OnInit {
 
+  now = new Date()
   loading: boolean;
   messages: Array<any> = [];
   dataToServer: any;
@@ -69,6 +70,8 @@ export class ClaimWithIreneComponent implements OnInit {
     'selectDamageType': false,
     'selectDamageHow': false,
     'warrantyConfirm': false,
+    'selectDate': false,
+    'selectTime': false,
   }
 
   claimMainReason = [];
@@ -89,6 +92,7 @@ export class ClaimWithIreneComponent implements OnInit {
     this.claimConfig = appConfigService.claimReason;
     this.userServiceService.getUserInfo();
     this.loading = true;
+    this.userData.UserId = 10057;
     let serverCall = [
       this.ajaxService.execute({
         method: 'POST', url: APIUrls.insuranceList,
@@ -366,8 +370,22 @@ export class ClaimWithIreneComponent implements OnInit {
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene10;
       component.messages[component.messages.length - 1].loader = false;
+      component.userActions.selectDate = true;
       component.scrollChat();
     }, 1500);
+  }
+  occurenceDate:any;
+  occurenceTime:any;
+  onSelectDate(event){
+    this.userActions.selectDate = false;
+    this.helpText = event.value;
+    this.occurenceDate = event.value;
+    this.userActions.selectTime = true;
+  }
+
+  onSelectTime(event){
+    this.occurenceTime = event.value;
+    this.helpText = this.occurenceDate + ('-' + event.value);
   }
 
   ngOnInit() {}
