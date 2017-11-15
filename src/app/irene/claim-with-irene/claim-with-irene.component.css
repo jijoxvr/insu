@@ -555,6 +555,19 @@
 	float: left;
 	width: 100%;
 }
+
+#frame .chatcontent .messagesContainer {
+  height: auto;
+  min-height: calc(100% - 300px);
+  max-height: calc(100% - 300px);
+}
+
+@media screen and (max-width: 735px) {
+  #frame .chatcontent .messagesContainer {
+    max-height: calc(100% - 300px);
+  }
+}
+
 @media screen and (max-width: 735px) {
   #frame .chatcontent .messages {
     max-height: calc(100% - 105px);
@@ -763,4 +776,27 @@ li .chat-button:nth-child(0n){
   height: 27px;
   margin-left: 4px;
   background:url('/assets/images/delete-msg.png') no-repeat center center;
+}
+
+.border-button{
+  background-color: #f5f5f5;
+  color: #ee3667;
+  border: 1px solid;
+}
+
+.border-button:hover{
+  box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.23);
+}
+.border-button:focus{
+  box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.23);
+  background-color: #f5f5f5;
+  color: #ee3667;
+  border: 1px solid;
+}
+
+:host ::ng-deep owl-date-time .owl-dateTime-dialog{
+  margin-left: 80%;
+}
+:host ::ng-deep owl-date-time .owl-state-default{
+  border: none!important;
 }

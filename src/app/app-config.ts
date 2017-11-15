@@ -178,10 +178,22 @@ export const AppLabels = { // modify this for changing laguage
         'irene3' : 'Please choose your policy, I will help you to get this claim sorted out in no time',
         'irene4' : 'Tell me USER_NAME, what really happened?',
         'irene5' : 'Sorry to hear that.. What you are claiming?',
+        'irene6': 'To proceed, the IMEI number will be reported to mobile carriers for blocking and the phone can no longer be used. Do you agree?',
+        'irene7' : 'Please specify your damage?',
+        'irene8' : 'How it happened?',
+        'irene9' : 'Is this covered under warranty?',
+        'irene10' : 'Let me know when it happened?',
 
         'rep1': 'I would like to file a claim',
         'rep2': 'DEVICE_NAME',
         'rep3': 'DAMAGE_TYPE',
+        'rep4': 'I would like to claim for REASON',
+        'rep5a': 'I Accept',
+        'rep5b': 'I Deny',
+        'rep6': 'DAMAGE_PART',
+        'rep7': 'HOW',
+        'rep8': 'Yes, It is',
+        'rep9': ' No, It isn',
         
     }
 }

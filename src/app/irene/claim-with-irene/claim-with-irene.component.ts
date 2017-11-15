@@ -53,6 +53,8 @@ export class ClaimWithIreneComponent implements OnInit {
   userPolicies: any;
   claimReason: any;
   claimConfig: any;
+  helpText = '';
+  disableSubmit = false;
 
   stageIndex = {
     stageOne: 2,
@@ -62,11 +64,17 @@ export class ClaimWithIreneComponent implements OnInit {
   userActions = {
     'purpose': false,
     'claimType': false,
-    'claimReason': false
+    'claimReason': false,
+    'confirmACDR': false,
+    'selectDamageType': false,
+    'selectDamageHow': false,
+    'warrantyConfirm': false,
   }
 
   claimMainReason = [];
   claimSubReason = [];
+  claimDamageType = [];
+  claimDamageHow = [];
   
   claimReasonGrouped = {};
   claimDamageTypeGrouped = {};
@@ -81,7 +89,6 @@ export class ClaimWithIreneComponent implements OnInit {
     this.claimConfig = appConfigService.claimReason;
     this.userServiceService.getUserInfo();
     this.loading = true;
-    this.userData.UserId = 10058
     let serverCall = [
       this.ajaxService.execute({
         method: 'POST', url: APIUrls.insuranceList,
@@ -100,6 +107,8 @@ export class ClaimWithIreneComponent implements OnInit {
 
   }
 
+  //Welcoming user
+
   stageOne(time = 2000) {
     this.messages = [];
     let component = this;
@@ -116,6 +125,8 @@ export class ClaimWithIreneComponent implements OnInit {
 
   }
 
+  // Showing assistance message
+
   stageOneA(time = 2000) {
     let component = this;
     component.pushData('sent message loading new', null, true);
@@ -126,6 +137,8 @@ export class ClaimWithIreneComponent implements OnInit {
       component.scrollChat();
     }, 1500);
   }
+
+  // On choosing claim
 
   onClaimChoice() {
     let component = this;
@@ -138,15 +151,20 @@ export class ClaimWithIreneComponent implements OnInit {
       component.messages[component.messages.length - 1].loader = false;
       component.scrollChat();
       setTimeout(function () {
+        component.helpText = 'Please select your policy';
         $('#claimSelect').addClass('open');
         component.preventDropDownClose();
         component.scrollChat();
-      }, 1500)
+      }, 1500);
     }, 1500);
   }
 
+  // User selects policy for claim 
+
   onSelectPolicy(policy) {
+    $('.messages').removeClass('messagesContainer');
     let component = this;
+    component.helpText = '';
     component.pushData('replies', AppLabels.irene.rep2.replace('DEVICE_NAME', policy.Device), false, true);
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
@@ -160,7 +178,7 @@ export class ClaimWithIreneComponent implements OnInit {
   }
 
 
-  
+  //On choosing damage/lost
 
   onClaimTypeChoice(type){
     let component = this;
@@ -177,21 +195,182 @@ export class ClaimWithIreneComponent implements OnInit {
     }, 1500);
   }
 
+  //On choosing Accidental damage repaire / Accidental damage replace / Liquid damage 
+
+  claimType:any;
   onClaimReasonChoice(type){
     let component = this;
+    component.claimType = type;
+    component.userActions.claimReason = false;
+    component.pushData('replies', AppLabels.irene.rep4.replace('REASON', type.label), false, true);
+    component.pushData('sent message loading new', null, true);
+    component.scrollChat();
     if(type.value.code == component.claimConfig.ACCIDENTAL_DAMAGE_REPLACE){
-      component.onAccidentalDamageReplace();
+      component.onAccidentalDamageReplace(type);
     }else{
-      alert(type.value.code)
+      component.continueWithClaim();
     }
   }
 
-  onAccidentalDamageReplace(){
-    alert('accidental damage replace')
+  //On choosing Accidental damage replace
+
+  onAccidentalDamageReplace(type){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene6;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.confirmACDR = true;
+      component.scrollChat();
+    }, 1500);
   }
 
-  ngOnInit() {
+  //On confirming Accidental damage replace (Imei blocking)
+
+  onAccidentalDamageReplaceConfirm(confirmed){
+    let component = this;
+    component.userActions.confirmACDR = false;
+    if(confirmed){
+      component.pushData('replies', AppLabels.irene.rep5a, false, true);
+      component.pushData('sent message loading new', null, true);
+      component.scrollChat();
+      component.continueWithClaim();
+    }
   }
+
+  // Continue with claim after confirmation or choosing claim reason
+
+  continueWithClaim(){
+    let component = this;
+    let type = component.claimDamageTypeGrouped[component.claimType.value.id];
+    if(type){
+      component.askAboutDamageType(type);
+    }else{
+      component.askMobileIsUnderWarranty();
+    }
+   
+  }
+
+  askAboutDamageType(type){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene7;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.selectDamageType = true;
+      component.claimDamageType = type;
+      component.types = [];
+      component.helpText = '';
+      component.scrollChat();
+    }, 1500);
+  }
+
+  types: Array<any>;
+  submitType = '';
+  onSelectDamageType(type, evt){
+    this.disableSubmit = true;
+    let index = this.types.indexOf(type);
+
+    if($(evt.target).hasClass('border-button'))
+      $(evt.target).removeClass('border-button');
+    else
+      $(evt.target).addClass('border-button');
+    
+    if(index > -1)
+      this.types.splice(index, 1);
+    else
+      this.types.push(type)
+
+    this.helpText = '';
+    for(let item of this.types)
+      this.helpText += item.label + ', ';
+    this.disableSubmit = (this.types.length == 0);
+    this.submitType = 'SUBMIT_DAMAGE';
+  }
+
+  onSend(type){
+    this.helpText = '';
+    if(type == 'SUBMIT_DAMAGE'){
+      this.onSubmitDamageType()
+    }
+  }
+
+  //On user selects damage type(part) as how it occured or continue with claim
+  onSubmitDamageType(){
+    let component = this;
+    component.userActions.selectDamageType = false;
+    let text = '';
+    for(let item of component.types)
+      text += item.label + ', ';
+    component.pushData('replies', AppLabels.irene.rep6.replace('DAMAGE_PART', text), false, true);
+    component.pushData('sent message loading new', null, true);
+    component.scrollChat();
+    let how = component.claimDamageSubTypeGrouped[component.types[0].value.id];
+    if(how){
+      component.askHowDamageOccured(how);
+    }else{
+      component.askMobileIsUnderWarranty();
+    }
+  }
+
+  askHowDamageOccured(how){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene8;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.selectDamageHow = true;
+      component.claimDamageHow = how;
+      setTimeout(function () {
+        component.helpText = 'Please tell how it occures';
+        $('#claimHowSelect').addClass('open');
+        component.preventDropDownClose();
+        component.scrollChat();
+      }, 1500);
+      component.scrollChat();
+    }, 1500);
+  }
+
+  // On select How damage has occured
+  onSelectHowDamaged(how){
+    $('.messages').removeClass('messagesContainer');
+    let component = this;
+    component.helpText = '';
+    component.userActions.selectDamageHow = false;
+    component.pushData('replies', AppLabels.irene.rep7.replace('HOW', how.label), false, true);
+    component.pushData('sent message loading new', null, true);
+    component.scrollChat();
+    component.askMobileIsUnderWarranty();
+  }
+
+  askMobileIsUnderWarranty(){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene9;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.warrantyConfirm = true;
+      component.scrollChat();
+    }, 1500);
+  }
+
+  // On warranty is confirmed
+  confirmWarranty(confirm){
+    let component = this;
+    component.userActions.warrantyConfirm = false;
+    component.pushData('replies', confirm ? AppLabels.irene.rep8 : AppLabels.irene.rep9, false, true);
+    component.pushData('sent message loading new', null, true);
+    component.scrollChat();
+    component.askAboutDateOfIncident();
+    
+  }
+
+  askAboutDateOfIncident(){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene10;
+      component.messages[component.messages.length - 1].loader = false;
+      component.scrollChat();
+    }, 1500);
+  }
+
+  ngOnInit() {}
 
   pushData(type, text, loader = false, undo?) {
     this.messages.push({
@@ -200,6 +379,7 @@ export class ClaimWithIreneComponent implements OnInit {
       'loader': loader,
       'undo': undo,
     })
+    this.scrollChat();
 
   }
 
@@ -218,8 +398,10 @@ export class ClaimWithIreneComponent implements OnInit {
     let claimDamageSubTypeDict = {}
     for (let item of data) {
       if (this.claimReasonGrouped[item.Issue_Id]){
-        if(!claimSubReasonDict[item.Issue_Id][item.IssueSub_Id])
+        if(!claimSubReasonDict[item.Issue_Id][item.IssueSub_Id]){
+          claimSubReasonDict[item.Issue_Id][item.IssueSub_Id] = true;
           this.claimReasonGrouped[item.Issue_Id].push({ value: { id: item.IssueSub_Id, code: item.IssueSub_Code }, label: item.IssueSub_Name });
+        }
       }
       else{
         claimSubReasonDict[item.Issue_Id] = {}
@@ -228,9 +410,11 @@ export class ClaimWithIreneComponent implements OnInit {
       }
       if(item.IssueDamageType_Id){
         if(this.claimDamageTypeGrouped[item.IssueSub_Id]){
-          if(!claimDamageTypeDict[item.IssueSub_Id][item.IssueDamageType_Id])
+          if(!claimDamageTypeDict[item.IssueSub_Id][item.IssueDamageType_Id]){
             this.claimDamageTypeGrouped[item.IssueSub_Id].
-            push({ value: { id: item.IssueDamageType_Id, code: item.IssueDamageType_Code }, label: item.IssueDamageType_Name });
+              push({ value: { id: item.IssueDamageType_Id, code: item.IssueDamageType_Code }, label: item.IssueDamageType_Name });
+              claimDamageTypeDict[item.IssueSub_Id][item.IssueDamageType_Id] = true;
+          }
         }else{
           claimDamageTypeDict[item.IssueSub_Id] = {};
           claimDamageTypeDict[item.IssueSub_Id][item.IssueDamageType_Id] = true;
@@ -239,11 +423,13 @@ export class ClaimWithIreneComponent implements OnInit {
         }
         if(item.IssueDamageTypeSub_Id){
           if(this.claimDamageSubTypeGrouped[item.IssueDamageType_Id]){
-            if(!claimDamageSubTypeDict[item.IssueDamageType_Id][item.IssueDamageTypeSub_Id])
+            if(!claimDamageSubTypeDict[item.IssueDamageType_Id][item.IssueDamageTypeSub_Id]){
               this.claimDamageSubTypeGrouped[item.IssueDamageType_Id].
-              push({ value: { id: item.IssueDamageTypeSub_Id, code: item.IssueDamageTypeSub_Code }, label: item.IssueDamageTypeSub_How });
+                push({ value: { id: item.IssueDamageTypeSub_Id, code: item.IssueDamageTypeSub_Code }, label: item.IssueDamageTypeSub_How });
+              claimDamageSubTypeDict[item.IssueDamageType_Id][item.IssueDamageTypeSub_Id] = true;
+            }
           }else{
-            claimDamageSubTypeDict[item.IssueSub_Id] = {};
+            claimDamageSubTypeDict[item.IssueDamageType_Id] = {};
             claimDamageSubTypeDict[item.IssueDamageType_Id][item.IssueDamageTypeSub_Id] = true;
             this.claimDamageSubTypeGrouped[item.IssueDamageType_Id] = 
               [{ value: { id: item.IssueDamageTypeSub_Id, code: item.IssueDamageTypeSub_Code }, label: item.IssueDamageTypeSub_How }];
@@ -275,11 +461,19 @@ export class ClaimWithIreneComponent implements OnInit {
   preventDropDownClose() {
     $('body').on('click', function (e) {
       if ($('.custom-drop').is(e.target)) {
-        $('#claimSelect').removeClass('open');
+        $('.dropup').removeClass('open');
       }
     });
+
+    setTimeout(function(){
+      $('.messages').addClass('messagesContainer');
+      $(".messages").animate({ scrollTop: 100000 }, "fast");
+    }, 200)
+    
   }
   checkAnimation(a, b){
     return a==b;
   }
+
+  
 }

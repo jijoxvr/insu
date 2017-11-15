@@ -5,6 +5,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { DatePickerModule } from "angular-io-datepicker";
+import { OverlayModule } from "angular-io-overlay";
 
 import { FacebookModule } from 'ngx-facebook';
 import { AngularFireModule } from 'angularfire2';

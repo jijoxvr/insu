@@ -98,6 +98,12 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/common@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.4.6.tgz#4b81420724e0828a0e839b95a55eb1a7e83918f2"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/compiler-cli@4.4.5":
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.4.5.tgz#61fa0336acd1a208c5f1c5c6d4df679e99953248"
@@ -112,9 +118,21 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/compiler@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-4.4.6.tgz#2ee1faf25b757e1d128979074be7fae529b3bc20"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/core@4.4.5":
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.4.5.tgz#54acbcbda11719f883c786a906974abeb132f1a0"
+  dependencies:
+    tslib "^1.7.1"
+
+"@angular/core@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.4.6.tgz#13031fd10dcfe438875419b38f21120958bc2354"
   dependencies:
     tslib "^1.7.1"
 
@@ -124,9 +142,21 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/forms@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-4.4.6.tgz#fe64ace42435c1b80f49034b7c41ce8caf14a44a"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/http@4.4.5":
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/@angular/http/-/http-4.4.5.tgz#2c735ed842401fc2356419268e288dcf2396e84f"
+  dependencies:
+    tslib "^1.7.1"
+
+"@angular/http@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-4.4.6.tgz#0af680c6710bdc026d940e225cfd0f6a5c005d0c"
   dependencies:
     tslib "^1.7.1"
 
@@ -136,9 +166,21 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/platform-browser-dynamic@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-4.4.6.tgz#4d3d9a6a7bf2cf3de4058a615ae059eff641fa36"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/platform-browser@4.4.5":
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.4.5.tgz#74eb91c0b758126f26d53ee56c7cf4668bd9cac5"
+  dependencies:
+    tslib "^1.7.1"
+
+"@angular/platform-browser@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.4.6.tgz#a9839c547e1b654fa1d24a89780c8ba6ab8dcce0"
   dependencies:
     tslib "^1.7.1"
 
@@ -153,6 +195,12 @@
 "@angular/router@4.4.5":
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-4.4.5.tgz#f73130cf487d9a32cc1988afda59665f44a28a89"
+  dependencies:
+    tslib "^1.7.1"
+
+"@angular/router@^4.0.0":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-4.4.6.tgz#0f6ad29ae0ff8d2c9ea379bd320447217b7ec866"
   dependencies:
     tslib "^1.7.1"
 
@@ -356,6 +404,41 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular-io-datepicker@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/angular-io-datepicker/-/angular-io-datepicker-1.3.1.tgz#63bbeba8cb7e6845597cb82327be606d25793465"
+  dependencies:
+    "@angular/common" "^4.0.0"
+    "@angular/compiler" "^4.0.0"
+    "@angular/core" "^4.0.0"
+    "@angular/forms" "^4.0.0"
+    "@angular/http" "^4.0.0"
+    "@angular/platform-browser" "^4.0.0"
+    "@angular/platform-browser-dynamic" "^4.0.0"
+    "@angular/router" "^4.0.0"
+    angular-io-overlay "^1.2.7"
+    core-js "^2.4.1"
+    moment "^2.14.1"
+    rxjs "^5.1.0"
+    zone.js "^0.8.4"
+
+angular-io-overlay@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/angular-io-overlay/-/angular-io-overlay-1.2.7.tgz#b5ed001b8b79ebe014423834080dd60c4fbac529"
+  dependencies:
+    "@angular/common" "^4.0.0"
+    "@angular/compiler" "^4.0.0"
+    "@angular/core" "^4.0.0"
+    "@angular/forms" "^4.0.0"
+    "@angular/http" "^4.0.0"
+    "@angular/platform-browser" "^4.0.0"
+    "@angular/platform-browser-dynamic" "^4.0.0"
+    "@angular/router" "^4.0.0"
+    core-js "^2.4.1"
+    moment "^2.14.1"
+    rxjs "^5.1.0"
+    zone.js "^0.8.4"
 
 angularfire2@^5.0.0-rc.3:
   version "5.0.0-rc.3"
@@ -1224,7 +1307,7 @@ core-js@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.4.1.tgz#4de911e667b0eae9124e34254b53aea6fc618d3e"
 
-core-js@^2.2.0, core-js@^2.4.0:
+core-js@^2.2.0, core-js@^2.4.0, core-js@^2.4.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.1.tgz#ae6874dc66937789b80754ff5428df66819ca50b"
 
@@ -1447,6 +1530,10 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
+
+date-fns@^1.28.5:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.29.0.tgz#12e609cdcb935127311d04d33334e2960a2a54e6"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -3526,6 +3613,10 @@ moment@2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
+moment@^2.14.1:
+  version "2.19.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.2.tgz#8a7f774c95a64550b4c7ebd496683908f9419dbe"
+
 ms@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
@@ -3562,6 +3653,12 @@ ncname@1.0.x:
 negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
+
+ng-pick-datetime@^5.0.0-beta.12:
+  version "5.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/ng-pick-datetime/-/ng-pick-datetime-5.0.0-beta.12.tgz#81375d9eba54441d716cd9ccee40ceba84095a9c"
+  dependencies:
+    date-fns "^1.28.5"
 
 ngx-cookie-service@^1.0.9:
   version "1.0.9"
@@ -4770,7 +4867,7 @@ rxjs@5.4.2:
   dependencies:
     symbol-observable "^1.0.1"
 
-rxjs@^5.4.2, rxjs@^5.5.2:
+rxjs@^5.1.0, rxjs@^5.4.2, rxjs@^5.5.2:
   version "5.5.2"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.2.tgz#28d403f0071121967f18ad665563255d54236ac3"
   dependencies:
@@ -6026,6 +6123,6 @@ zone.js@0.8.4:
   version "0.8.4"
   resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.4.tgz#cc40ae5a1c879601c5ebba2096b5c80f0c4c3602"
 
-zone.js@^0.8.14:
+zone.js@^0.8.14, zone.js@^0.8.4:
   version "0.8.18"
   resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.18.tgz#8cecb3977fcd1b3090562ff4570e2847e752b48d"
