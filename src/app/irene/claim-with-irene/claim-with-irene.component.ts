@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { UserServiceService } from "../../core/user-service.service";
+import { MapsAPILoader } from '@agm/core';
+import { } from 'googlemaps';
 import { AppConfigService } from "../../core/app-config.service";
 import { AjaxService } from "../../shared/ajax-api/ajax.service";
 import { AppLabels, APIUrls } from "../../app-config";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { Observable } from 'rxjs/Observable';
+import * as moment from "moment";
 import 'rxjs/add/observable/forkJoin';
 declare var $: any;
 
@@ -49,13 +52,15 @@ export class ClaimWithIreneComponent implements OnInit {
   now = new Date()
   loading: boolean;
   messages: Array<any> = [];
-  dataToServer: any;
+  dataToServer: any = {};
   userData: any;
   userPolicies: any;
   claimReason: any;
   claimConfig: any;
   helpText = '';
   disableSubmit = false;
+  disableUserInput = false;
+  userInput: any;
 
   stageIndex = {
     stageOne: 2,
@@ -66,12 +71,14 @@ export class ClaimWithIreneComponent implements OnInit {
     'purpose': false,
     'claimType': false,
     'claimReason': false,
-    'confirmACDR': false,
+    'confirmIMEI': false,
     'selectDamageType': false,
     'selectDamageHow': false,
     'warrantyConfirm': false,
     'selectDate': false,
     'selectTime': false,
+    'confirmDeductable': false,
+    'uploadSelfieVideo': false,
   }
 
   claimMainReason = [];
@@ -84,15 +91,19 @@ export class ClaimWithIreneComponent implements OnInit {
   claimDamageSubTypeGrouped = {};
   claimIssueGrouped = {};
 
+  @ViewChild("search")
+  public searchElementRef: ElementRef;
+
   constructor(public userServiceService: UserServiceService,
-    public ajaxService: AjaxService, private appConfigService: AppConfigService) {
+    public ajaxService: AjaxService, private appConfigService: AppConfigService,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone) {
     this.userServiceService.userObservable.subscribe(user => {
       this.userData = user;
     })
     this.claimConfig = appConfigService.claimReason;
     this.userServiceService.getUserInfo();
     this.loading = true;
-    this.userData.UserId = 10057;
     let serverCall = [
       this.ajaxService.execute({
         method: 'POST', url: APIUrls.insuranceList,
@@ -101,19 +112,27 @@ export class ClaimWithIreneComponent implements OnInit {
       this.ajaxService.execute({ method: 'GET', url: APIUrls.claimReason }),
     ]
     Observable.forkJoin(...serverCall).subscribe(results => {
-      console.log(results)
       this.userPolicies = results[0].Details ? results[0].Details : [];
       this.claimReason = results[1].Details ? results[1].Details : [];
       this.extractClaimReason(this.claimReason);
       this.loading = false;
-      this.stageOne();
+      this.welcomeUser();
     });
 
   }
 
+  initAutoComplete(){
+    this.mapsAPILoader.load().then(() => {
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+    })
+  }
+
   //Welcoming user
 
-  stageOne(time = 2000) {
+  welcomeUser(time = 2000) {
+    this.initAutoComplete();
     this.messages = [];
     let component = this;
     component.pushData('sent message loading new', null, true);
@@ -123,15 +142,15 @@ export class ClaimWithIreneComponent implements OnInit {
       component.messages[component.messages.length - 1].loader = false;
       component.scrollChat();
       setTimeout(function () {
-        component.stageOneA();
+        component.askUserAboutPurpose();
       }, 1500)
     }, 1500, this);
 
   }
 
-  // Showing assistance message
+  // Showing assistance message Activate/Claim...(purpose of meeting irene)
 
-  stageOneA(time = 2000) {
+  askUserAboutPurpose(time = 2000) {
     let component = this;
     component.pushData('sent message loading new', null, true);
     setTimeout(function () {
@@ -142,7 +161,7 @@ export class ClaimWithIreneComponent implements OnInit {
     }, 1500);
   }
 
-  // On choosing claim
+  // When user select claiming as purpose of visit.. 
 
   onClaimChoice() {
     let component = this;
@@ -150,6 +169,14 @@ export class ClaimWithIreneComponent implements OnInit {
     component.pushData('replies', AppLabels.irene.rep1, false, true);
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
+    component.askUserToSelectPolicy();
+    
+  }
+
+  //Activated policies are listed and ask used to select from list...
+
+  askUserToSelectPolicy(){
+    let component = this;
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene3;
       component.messages[component.messages.length - 1].loader = false;
@@ -163,15 +190,23 @@ export class ClaimWithIreneComponent implements OnInit {
     }, 1500);
   }
 
-  // User selects policy for claim 
+  // When user select policy for claiming
 
   onSelectPolicy(policy) {
     $('.messages').removeClass('messagesContainer');
     let component = this;
+    component.dataToServer.policy = policy.Insurance_Id;
     component.helpText = '';
     component.pushData('replies', AppLabels.irene.rep2.replace('DEVICE_NAME', policy.Device), false, true);
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
+    component.askUserWhatHappened();
+    
+  }
+
+  // Ask user what really happened (Damage or Loss)
+  askUserWhatHappened(){
+    let component = this;
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene4.
         replace('USER_NAME', component.userData.FirstName);
@@ -179,13 +214,16 @@ export class ClaimWithIreneComponent implements OnInit {
       component.userActions.claimType = true;
       component.scrollChat();
     }, 1500);
+    
   }
+
 
 
   //On choosing damage/lost
 
   onClaimTypeChoice(type){
     let component = this;
+    component.dataToServer.mainType = {id:type.value.id, code:type.value.code};
     component.userActions.claimType = false;
     component.pushData('replies', AppLabels.irene.rep3.replace('DAMAGE_TYPE', type.label), false, true);
     component.pushData('sent message loading new', null, true);
@@ -199,18 +237,20 @@ export class ClaimWithIreneComponent implements OnInit {
     }, 1500);
   }
 
-  //On choosing Accidental damage repaire / Accidental damage replace / Liquid damage 
-
+  //On choosing Damage Sub Category 
+  //Or on choosing Lost Sub Category
   claimType:any;
   onClaimReasonChoice(type){
     let component = this;
+    component.dataToServer.subType = {id:type.value.id, code:type.value.code};
     component.claimType = type;
     component.userActions.claimReason = false;
     component.pushData('replies', AppLabels.irene.rep4.replace('REASON', type.label), false, true);
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
-    if(type.value.code == component.claimConfig.ACCIDENTAL_DAMAGE_REPLACE){
-      component.onAccidentalDamageReplace(type);
+    if(type.value.code == component.claimConfig.ACCIDENTAL_DAMAGE_REPLACE||
+      component.dataToServer.mainType.code == component.claimConfig.LST){
+        component.askUserToConfirmIMEIBlockage(type);
     }else{
       component.continueWithClaim();
     }
@@ -218,21 +258,21 @@ export class ClaimWithIreneComponent implements OnInit {
 
   //On choosing Accidental damage replace
 
-  onAccidentalDamageReplace(type){
+  askUserToConfirmIMEIBlockage(type){
     let component = this;
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene6;
       component.messages[component.messages.length - 1].loader = false;
-      component.userActions.confirmACDR = true;
+      component.userActions.confirmIMEI = true;
       component.scrollChat();
     }, 1500);
   }
 
-  //On confirming Accidental damage replace (Imei blocking)
+  //On confirming Imei blocking)
 
-  onAccidentalDamageReplaceConfirm(confirmed){
+  onConfirmingIMEIBlockage(confirmed){
     let component = this;
-    component.userActions.confirmACDR = false;
+    component.userActions.confirmIMEI = false;
     if(confirmed){
       component.pushData('replies', AppLabels.irene.rep5a, false, true);
       component.pushData('sent message loading new', null, true);
@@ -249,7 +289,10 @@ export class ClaimWithIreneComponent implements OnInit {
     if(type){
       component.askAboutDamageType(type);
     }else{
-      component.askMobileIsUnderWarranty();
+      if(component.dataToServer.mainType.code == component.claimConfig.LST)
+        component.askMobileIsUnderWarranty();
+      else
+        component.askAboutDateOfIncident();
     }
    
   }
@@ -290,10 +333,13 @@ export class ClaimWithIreneComponent implements OnInit {
     this.submitType = 'SUBMIT_DAMAGE';
   }
 
-  onSend(type){
+  onSend(){
     this.helpText = '';
-    if(type == 'SUBMIT_DAMAGE'){
-      this.onSubmitDamageType()
+    if(this.submitType == 'SUBMIT_DAMAGE'){
+      this.onSubmitDamageType();
+
+    }else if(this.submitType == 'SUBMIT_DATE'){
+      this.onSubmitDateAndTime();
     }
   }
 
@@ -337,6 +383,7 @@ export class ClaimWithIreneComponent implements OnInit {
     $('.messages').removeClass('messagesContainer');
     let component = this;
     component.helpText = '';
+    component.dataToServer.how = {id:how.value.id, code:how.value.code};
     component.userActions.selectDamageHow = false;
     component.pushData('replies', AppLabels.irene.rep7.replace('HOW', how.label), false, true);
     component.pushData('sent message loading new', null, true);
@@ -357,6 +404,7 @@ export class ClaimWithIreneComponent implements OnInit {
   // On warranty is confirmed
   confirmWarranty(confirm){
     let component = this;
+    component.dataToServer.hasWarranty = confirm;
     component.userActions.warrantyConfirm = false;
     component.pushData('replies', confirm ? AppLabels.irene.rep8 : AppLabels.irene.rep9, false, true);
     component.pushData('sent message loading new', null, true);
@@ -364,6 +412,8 @@ export class ClaimWithIreneComponent implements OnInit {
     component.askAboutDateOfIncident();
     
   }
+  occurenceDate = new Date();
+  occurenceTime = new Date();
 
   askAboutDateOfIncident(){
     let component = this;
@@ -371,24 +421,92 @@ export class ClaimWithIreneComponent implements OnInit {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene10;
       component.messages[component.messages.length - 1].loader = false;
       component.userActions.selectDate = true;
+      component.disableUserInput = false;
+      component.userInput = moment(component.occurenceDate).format('DD MMMM, YYYY') + moment(component.occurenceTime).format(' - hh:mm A');
       component.scrollChat();
+      component.submitType = 'SUBMIT_DATE';
     }, 1500);
   }
-  occurenceDate:any;
-  occurenceTime:any;
+  
   onSelectDate(event){
-    this.userActions.selectDate = false;
-    this.helpText = event.value;
     this.occurenceDate = event.value;
-    this.userActions.selectTime = true;
+    this.userInput = moment(this.occurenceDate).format('DD MMMM, YYYY') + moment(this.occurenceTime).format(' - hh:mm A');
   }
 
   onSelectTime(event){
     this.occurenceTime = event.value;
-    this.helpText = this.occurenceDate + ('-' + event.value);
+    this.userInput = moment(this.occurenceDate).format('DD MMMM, YYYY') + moment(this.occurenceTime).format(' - hh:mm A');
   }
 
-  ngOnInit() {}
+
+  onSubmitDateAndTime(){
+    let component = this;
+    component.disableUserInput = true;
+    component.userActions.selectDate = false;
+    component.pushData('replies', AppLabels.irene.rep10.replace('DATE_TIME', component.userInput), false, true);
+    component.pushData('sent message loading new', null, true);
+    component.userInput = '';
+    component.scrollChat();
+    if(component.dataToServer.mainType.code == component.claimConfig.LST)
+      component.askPlaceOfIncident();
+    else
+      component.askConfirmationOnDeductable();
+  }
+
+  askConfirmationOnDeductable(){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene11.
+        replace('AMOUNT', '123');
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.confirmDeductable = true;
+      component.scrollChat();
+    }, 1500);
+  }
+
+  onConfirmDeductable(confirmed){
+    let component = this;
+    component.userActions.confirmDeductable = false;
+    if(confirmed){
+      component.userActions.selectDate = false;
+      component.pushData('replies', AppLabels.irene.rep11, false, true);
+      component.pushData('sent message loading new', null, true);
+      component.scrollChat();
+      component.askToUploadSelfieVideo()
+    }
+  }
+
+  askToUploadSelfieVideo(){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene12;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.uploadSelfieVideo = true;
+      component.scrollChat();
+    }, 1500);
+  }
+
+  askPlaceOfIncident(){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene13;
+      component.messages[component.messages.length - 1].loader = false;
+      component.scrollChat();
+    }, 1500);
+  }
+
+  onSubmitingPlaceOfIncident(){
+
+  }
+
+  showRecordingScreen(){
+
+  }
+
+  ngOnInit() {
+    
+    
+  }
 
   pushData(type, text, loader = false, undo?) {
     this.messages.push({
@@ -404,7 +522,7 @@ export class ClaimWithIreneComponent implements OnInit {
   undoChat(stage) {
     switch (stage) {
       case 1:
-        this.stageOne(); return;
+        this.welcomeUser(); return;
     }
   }
 
@@ -493,5 +611,9 @@ export class ClaimWithIreneComponent implements OnInit {
     return a==b;
   }
 
-  
+  checkIrene(string){
+    let c = string.split(' ');
+    if(c && c[0] == 'sent') return true;
+    return false;
+  }
 }

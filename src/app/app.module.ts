@@ -11,6 +11,7 @@ import { OverlayModule } from "angular-io-overlay";
 import { FacebookModule } from 'ngx-facebook';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppRouting } from './app.routing';
 import { SharedModule } from './shared/shared.module';
@@ -49,6 +50,10 @@ export const firebaseConfig = {
     AppRouting,
     SharedModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyCA0wo7qYwenWNCWUsBhkmWGRQBI2CiqoM",
+      libraries: ["places"]
+    }),
     FacebookModule.forRoot(),
   ],
   providers: [

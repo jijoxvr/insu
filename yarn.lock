@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@agm/core@^1.0.0-beta.2":
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@agm/core/-/core-1.0.0-beta.2.tgz#da15c0a5e86fe9e1178f14c36a3e0ffc14f9ad77"
+
 "@angular-devkit/build-optimizer@~0.0.23":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.0.32.tgz#1bf32332d8a7c84043059e3d265a52f9d11726fd"
@@ -285,6 +289,10 @@
 "@types/chartist@0.9.34":
   version "0.9.34"
   resolved "https://registry.yarnpkg.com/@types/chartist/-/chartist-0.9.34.tgz#2b2d6b6191f28d34d23b8054c748fcbfebc29e81"
+
+"@types/googlemaps@^3.30.0":
+  version "3.30.0"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.30.0.tgz#ca99a74b97d581b1cdbccf2973d05f26633d1975"
 
 "@types/jasmine@2.5.38":
   version "2.5.38"

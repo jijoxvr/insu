@@ -1,0 +1,27 @@
+.image {
+    position: absolute;
+
+}
+
+.profilePicContainer {
+    position: absolute;
+    top: 97px;
+    left: 44px;
+    z-index: 99;
+    width: 128px;
+    border-radius: 50%;
+}
+.profilePic{
+    width: 127px;
+    height: 127px;
+    border-radius: 50%;
+    margin: 20px;
+    object-fit: cover;
+    object-position: center right;
+}
+
+.profilePicRingContainer {
+    margin-top: 10px;
+    margin-right: 5px;
+    position: relative;
+}

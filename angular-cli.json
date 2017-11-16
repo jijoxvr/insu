@@ -24,6 +24,7 @@
           "../node_modules/ng-pick-datetime/assets/style/picker.min.css",
           "./assets/sass/material-dashboard.scss",
           "./assets/css/demo.css",
+          "./assets/css/circle.css",
           "styles.css"
       ],
       "scripts": [

@@ -177,12 +177,15 @@ export const AppLabels = { // modify this for changing laguage
         'irene2': 'How may i assist you?',
         'irene3' : 'Please choose your policy, I will help you to get this claim sorted out in no time',
         'irene4' : 'Tell me USER_NAME, what really happened?',
-        'irene5' : 'Sorry to hear that.. What you are claiming?',
+        'irene5' : 'Sorry to hear that.. What are you claiming for?',
         'irene6': 'To proceed, the IMEI number will be reported to mobile carriers for blocking and the phone can no longer be used. Do you agree?',
         'irene7' : 'Please specify your damage?',
         'irene8' : 'How it happened?',
         'irene9' : 'Is this covered under warranty?',
         'irene10' : 'Let me know when it happened?',
+        'irene11' : 'You have to pay the deductible of AMOUNT IDR for your claim. Do you want to proceed?',
+        'irene12' : 'Upload a selfie video describing the incident',
+        'irene13' : 'Place of incident',
 
         'rep1': 'I would like to file a claim',
         'rep2': 'DEVICE_NAME',
@@ -194,6 +197,8 @@ export const AppLabels = { // modify this for changing laguage
         'rep7': 'HOW',
         'rep8': 'Yes, It is',
         'rep9': ' No, It isn',
+        'rep10': 'The incident took place on DATE_TIME',
+        'rep11': 'Yes, I would like to proceed',
         
     }
 }

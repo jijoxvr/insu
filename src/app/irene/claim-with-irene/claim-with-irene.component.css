@@ -795,20 +795,20 @@ li .chat-button:nth-child(0n){
 }
 
 :host ::ng-deep owl-date-time .owl-dateTime-dialog{
-  margin-left: 80%;
+  /* margin-left: 80%; */
+  margin-bottom: 10%;
 }
 :host ::ng-deep owl-date-time .owl-state-default{
   border: none!important;
 }
 :host ::ng-deep owl-date-time .owl-timer-wrapper{
-  background-color: rgb(238, 180, 194)!important;
-  border: 2px solid #ee3667!important;
+  background-color: rgb(53, 50, 51)!important;
 }
 :host ::ng-deep owl-date-time .owl-timer-control{
-  color: #ee3667!important;
+  color: #fff!important;
 }
 :host ::ng-deep owl-date-time .owl-timer-dot{
-  background: #ee3667!important;
+  background: #fff!important;
 }
 :host ::ng-deep owl-date-time .owl-timer-text{
   /* width: 72%!important; */
@@ -828,5 +828,14 @@ li .chat-button:nth-child(0n){
 }
 :host ::ng-deep owl-date-time .owl-calendar-wrapper{
   color: #fff!important;
-  background-color: #ee3667!important;
+  background-color: rgb(53, 50, 51)!important;
+}
+
+:host ::ng-deep owl-date-time .year-control {
+  font-size: 1.8em!important;
+  font-style: italic!important;
+  color: #efefef!important;
+}
+.date-time-container{
+  margin-left: 21%!important;
 }

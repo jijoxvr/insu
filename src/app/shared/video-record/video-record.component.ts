@@ -30,6 +30,19 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     video.muted = false;
     video.controls = true;
     video.autoplay = false;
+    navigator.mediaDevices
+    .getUserMedia({
+      video: {
+        advanced: [{
+          width: 1280,
+          height: 720
+        }
+        ]
+      },
+      audio: true
+    })
+    .then(this.successCallback.bind(this), this.errorCallback.bind(this));
+    
   }
 
   toggleControls() {
@@ -40,7 +53,6 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
   }
 
   successCallback(stream: MediaStream) {
-
     var options = {
       mimeType: 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
       audioBitsPerSecond: 128000,
@@ -49,6 +61,9 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     };
     this.stream = stream;
     this.recordRTC = RecordRTC(stream, options);
+  }
+
+  startRecording(stream: MediaStream){
     this.recordRTC.startRecording();
     this.isRecording = true;
     this.isRecordingCompleted = false;
@@ -56,6 +71,7 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     video.src = window.URL.createObjectURL(stream);
     this.toggleControls();
   }
+
 
   errorCallback() {
     alert('No Media device found')
@@ -72,20 +88,6 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     
   }
 
-  startRecording() {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          advanced: [{
-            width: 1280,
-            height: 720
-          }
-          ]
-        },
-        audio: true
-      })
-      .then(this.successCallback.bind(this), this.errorCallback.bind(this));
-  }
 
   stopRecording() {
     this.isRecording = false;

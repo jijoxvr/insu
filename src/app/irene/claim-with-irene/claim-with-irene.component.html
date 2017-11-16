@@ -10,9 +10,10 @@
         <div class="messages">
           <ul>
             <li *ngFor="let msg of messages" class="{{msg.type}}">
-              <img src="../assets/images/irene.png" alt="" />
+              <img *ngIf="checkIrene(msg.type)" src="../assets/images/irene.png" alt="" />
+              <img *ngIf="!checkIrene(msg.type)" src="{{userData.ProfileLink}}" alt="" />
               <p *ngIf="msg.loader">
-                  <span ></span>
+                <span></span>
               </p>
               <p *ngIf="msg.text">
                 <a (click)="undoChat(msg.undo)" href="javascript:void(0)" *ngIf="msg.undo" class="closeButton"></a>
@@ -21,48 +22,62 @@
             </li>
           </ul>
           <ul>
-            <owl-date-time (onSelect)="onSelectTime($event)" [defaultMoment]="now" *ngIf="userActions.selectTime" inline="true" hourFormat='12' type="timer"></owl-date-time>
-            <owl-date-time (onSelect)="onSelectDate($event)" [defaultMoment]="now" *ngIf="userActions.selectDate" inline="true" hourFormat='12' type="calendar"></owl-date-time>
+            <li class="date-time-container" *ngIf="userActions.selectDate">
+              <owl-date-time (onSelect)="onSelectDate($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="calendar"></owl-date-time>
+              <owl-date-time (onSelect)="onSelectTime($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="timer"></owl-date-time>
+            </li>
             <li *ngIf="userActions.purpose" class="send" style="padding-top: 60px;text-align: center;">
               <button *ngIf="userPolicies.length > 0" [@zoomInUp1]="''" (click)="onClaimChoice()" class="btn chat-button btn-primary">Claim</button>
               <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Activate</button>
             </li>
-            <li *ngIf="userActions.confirmACDR" class="send" style="padding-top: 60px;text-align: center;">
-              <button [@zoomInUp1]="''" (click)="onAccidentalDamageReplaceConfirm(true)" class="btn chat-button btn-primary">Accept</button>
+            <li *ngIf="userActions.confirmIMEI" class="send" style="padding-top: 60px;text-align: center;">
+              <button [@zoomInUp1]="''" (click)="onConfirmingIMEIBlockage(true)" class="btn chat-button btn-primary">Accept</button>
               <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Deny</button>
             </li>
             <li *ngIf="userActions.claimType" class="send" style="padding-top: 60px;text-align: center;">
-                <button [@zoomInUp1]="''" *ngFor="let reason of claimMainReason; let i = index" (click)="onClaimTypeChoice(reason)" class="btn chat-button btn-primary">{{reason.label}}</button>
+              <button [@zoomInUp1]="''" *ngFor="let reason of claimMainReason; let i = index" (click)="onClaimTypeChoice(reason)" class="btn chat-button btn-primary">{{reason.label}}</button>
             </li>
             <li *ngIf="userActions.claimReason" class="send" style="padding-top: 60px;text-align: center;">
-                <button [@zoomInUp1]="''"  *ngFor="let reason of claimSubReason" (click)="onClaimReasonChoice(reason)" class="btn chat-button btn-primary border-button">{{reason.label}}</button>
+              <button [@zoomInUp1]="''" *ngFor="let reason of claimSubReason" (click)="onClaimReasonChoice(reason)" class="btn chat-button btn-primary border-button">{{reason.label}}</button>
             </li>
             <li *ngIf="userActions.selectDamageType" class="send" style="padding-top: 60px;text-align: center;">
-              <button [@zoomInUp1]="''"  *ngFor="let type of claimDamageType" (click)="onSelectDamageType(type, $event)" class="btn chat-button btn-primary border-button">{{type.label}}</button>
+              <button [@zoomInUp1]="''" *ngFor="let type of claimDamageType" (click)="onSelectDamageType(type, $event)" class="btn chat-button btn-primary border-button">{{type.label}}</button>
             </li>
-           
             <li *ngIf="userActions.warrantyConfirm" class="send" style="padding-top: 60px;text-align: center;">
               <button [@zoomInUp1]="''" (click)="confirmWarranty(true)" class="btn chat-button btn-primary">Yes</button>
               <button [@zoomInUp2]="''" (click)="confirmWarranty(false)" class="btn chat-button btn-primary">No</button>
             </li>
+            <li *ngIf="userActions.confirmDeductable" class="send" style="padding-top: 60px;text-align: center;">
+              <button [@zoomInUp1]="''" (click)="onConfirmDeductable(true)" class="btn chat-button btn-primary">Yes</button>
+              <button [@zoomInUp2]="''" (click)="onConfirmDeductable(false)" class="btn chat-button btn-primary">No</button>
+            </li>
+            <li *ngIf="userActions.uploadSelfieVideo" style="padding-top: 60px;text-align: center;">
+              <button (click)="tryRecording=true" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default btn-circle btn-xl kupu-pink">
+                <i class="fa fa-camera faa-passing-reverse animated"></i>
+              </button>
+            </li>
           </ul>
         </div>
-       
-      
+
+
         <div class="message-input">
           <div class="wrap">
-            <input disabled type="text" placeholder="{{helpText}}" />
+            <input [(ngModel)]="userInput" #search [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
             <div id="claimSelect" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
-                <li *ngFor="let item of userPolicies"><a class="custom-drop" (click)="onSelectPolicy(item)" href="javascript:void(0)">{{item.Device}}</a></li>
+                <li *ngFor="let item of userPolicies">
+                  <a class="custom-drop" (click)="onSelectPolicy(item)" href="javascript:void(0)">{{item.Device}}</a>
+                </li>
               </ul>
             </div>
             <div *ngIf="claimDamageHow" id="claimHowSelect" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
-                <li *ngFor="let item of claimDamageHow"><a class="custom-drop" (click)="onSelectHowDamaged(item)" href="javascript:void(0)">{{item.label}}</a></li>
+                <li *ngFor="let item of claimDamageHow">
+                  <a class="custom-drop" (click)="onSelectHowDamaged(item)" href="javascript:void(0)">{{item.label}}</a>
+                </li>
               </ul>
             </div>
-            <button (click)="onSend(submitType)" [disabled]="disableSubmit" class="submit">
+            <button (click)="onSend()" [disabled]="disableSubmit" class="submit">
               <img src="../assets/images/send.png" width="66px">
             </button>
           </div>
@@ -70,5 +85,17 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <app-video-record *ngIf="tryRecording"></app-video-record>
+      </div>
+    </div>
   </div>
 </div>

@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.0.0-beta.2",
     "@angular/animations": "4.4.5",
     "@angular/common": "4.4.5",
     "@angular/compiler": "4.4.5",
@@ -49,6 +50,7 @@
     "@angular/compiler-cli": "4.4.5",
     "@types/bootstrap": "3.3.32",
     "@types/chartist": "0.9.34",
+    "@types/googlemaps": "^3.30.0",
     "@types/jasmine": "2.5.38",
     "@types/jquery": "1.10.31",
     "@types/node": "6.0.73",

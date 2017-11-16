@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private fb: FacebookService, private ajaxService: AjaxService) {
       
       let initParams: InitParams = {
-        appId: '1702463556633981',
+        appId: '1694965240568009',
         xfbml: true,
         version: 'v2.8'
       };
@@ -110,7 +110,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
       .subscribe(data =>{
         this.loading = false;
         let response = data.Details[0];
-        response.ProfilePic = this.photoUrl;
         localStorage.setItem('userData', JSON.stringify(response));
         this.router.navigate(['dashboard']);
       }, error=>{
