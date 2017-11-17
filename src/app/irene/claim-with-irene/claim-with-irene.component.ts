@@ -173,22 +173,23 @@ export class ClaimWithIreneComponent implements OnInit {
   }
 
   // When user select claiming as purpose of visit...
-  index = 0;
+  start = 0;
   onClaimChoice() {
     let component = this;
     component.userActions.purpose = false;
     component.pushData('replies', AppLabels.irene.rep1, false, false);
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
-    component.index = 1
     component.askUserToSelectPolicy();
     
   }
 
   //Activated policies are listed and ask used to select from list...
 
-  askUserToSelectPolicy(delay=1500){
+  askUserToSelectPolicy(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene3;
       component.messages[component.messages.length - 1].loader = false;
@@ -218,15 +219,17 @@ export class ClaimWithIreneComponent implements OnInit {
   }
 
   // Ask user what really happened (Damage or Loss)
-  askUserWhatHappened(){
+  askUserWhatHappened(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene4.
         replace('USER_NAME', component.userData.FirstName);
       component.messages[component.messages.length - 1].loader = false;
       component.userActions.claimType = true;
       component.scrollChat();
-    }, 1500);
+    }, delay);
     
   }
 
@@ -246,14 +249,16 @@ export class ClaimWithIreneComponent implements OnInit {
 
   //Ask user about subIssue (Damage Sub Category and Lost Sub Category)
 
-  askUserAboutClaimReason(){
+  askUserAboutClaimReason(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene5
       component.messages[component.messages.length - 1].loader = false;
       component.userActions.claimReason = true;
       component.scrollChat();
-    }, 1500);
+    }, delay);
   }
 
   //On choosing Damage Sub Category 
@@ -270,7 +275,7 @@ export class ClaimWithIreneComponent implements OnInit {
     component.scrollChat();
     if(type.value.code == component.claimConfig.ACCIDENTAL_DAMAGE_REPLACE ||
       component.dataToServer.mainType.code == component.claimConfig.LOST){
-        component.askUserToConfirmIMEIBlockage(type);
+        component.askUserToConfirmIMEIBlockage();
     }else{
       component.continueWithClaim();
     }
@@ -278,14 +283,16 @@ export class ClaimWithIreneComponent implements OnInit {
 
   //On choosing Accidental damage replace or any type of lost
 
-  askUserToConfirmIMEIBlockage(type){
+  askUserToConfirmIMEIBlockage(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene6;
       component.messages[component.messages.length - 1].loader = false;
       component.userActions.confirmIMEI = true;
       component.scrollChat();
-    }, 1500);
+    }, delay);
   }
 
   //On confirming Imei blocking)
@@ -313,7 +320,7 @@ export class ClaimWithIreneComponent implements OnInit {
     let component = this;
     let type = component.claimDamageTypeGrouped[component.claimType.value.id];
     if(type){
-      component.askAboutDamageType(type);
+      component.askAboutDamageType();
     }else{
       // Assuming that LOST category has no damage type and damage how 
       if(component.dataToServer.mainType.code != component.claimConfig.LOST)
@@ -324,8 +331,11 @@ export class ClaimWithIreneComponent implements OnInit {
    
   }
 
-  askAboutDamageType(type){
+  askAboutDamageType(delay=1500, slice?){
     let component = this;
+    let type = component.claimDamageTypeGrouped[component.claimType.value.id];
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene7;
       component.messages[component.messages.length - 1].loader = false;
@@ -334,43 +344,7 @@ export class ClaimWithIreneComponent implements OnInit {
       component.types = [];
       component.helpText = '';
       component.scrollChat();
-    }, 1500);
-  }
-
-  types: Array<any>;
-  submitType = '';
-  onSelectDamageType(type, evt){
-    this.disableSubmit = true;
-    let index = this.types.indexOf(type);
-
-    if($(evt.target).hasClass('border-button'))
-      $(evt.target).removeClass('border-button');
-    else
-      $(evt.target).addClass('border-button');
-    
-    if(index > -1)
-      this.types.splice(index, 1);
-    else
-      this.types.push(type)
-
-    this.helpText = '';
-    for(let item of this.types)
-      this.helpText += item.label + ', ';
-    this.disableSubmit = (this.types.length == 0);
-    this.submitType = 'SUBMIT_DAMAGE';
-  }
-
-  onSend(){
-    this.helpText = '';
-    if(this.submitType == 'SUBMIT_DAMAGE'){
-      this.onSubmitDamageType();
-    }else if(this.submitType == 'SUBMIT_DATE'){
-      this.onSubmitDateAndTime();
-    }else if(this.submitType == 'SUBMIT_PLACE'){
-      let event = $.Event('keypress');
-      event.which = 13;
-      $('#googleAutoComplete').trigger(event);
-    }
+    }, delay);
   }
 
   //On user selects damage type(part) as how it occured or continue with claim
@@ -385,14 +359,17 @@ export class ClaimWithIreneComponent implements OnInit {
     component.scrollChat();
     let how = component.claimDamageSubTypeGrouped[component.types[0].value.id];
     if(how){
-      component.askHowDamageOccured(how);
+      component.askHowDamageOccured();
     }else{
       component.askMobileIsUnderWarranty();
     }
   }
 
-  askHowDamageOccured(how){
+  askHowDamageOccured(delay=1500, slice?){
     let component = this;
+    let how = component.claimDamageSubTypeGrouped[component.types[0].value.id];
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene8;
       component.messages[component.messages.length - 1].loader = false;
@@ -403,9 +380,9 @@ export class ClaimWithIreneComponent implements OnInit {
         $('#claimHowSelect').addClass('open');
         component.preventDropDownClose();
         component.scrollChat();
-      }, 1500);
+      }, delay);
       component.scrollChat();
-    }, 1500);
+    }, delay);
   }
 
   // On select How damage has occured
@@ -421,14 +398,16 @@ export class ClaimWithIreneComponent implements OnInit {
     component.askMobileIsUnderWarranty();
   }
 
-  askMobileIsUnderWarranty(){
+  askMobileIsUnderWarranty(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene9;
       component.messages[component.messages.length - 1].loader = false;
       component.userActions.warrantyConfirm = true;
       component.scrollChat();
-    }, 1500);
+    }, delay);
   }
 
   // On warranty is confirmed
@@ -445,8 +424,10 @@ export class ClaimWithIreneComponent implements OnInit {
   occurenceDate = new Date();
   occurenceTime = new Date();
 
-  askAboutDateOfIncident(){
+  askAboutDateOfIncident(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene10;
       component.messages[component.messages.length - 1].loader = false;
@@ -455,19 +436,8 @@ export class ClaimWithIreneComponent implements OnInit {
       component.userInput = moment(component.occurenceDate).format('DD MMMM, YYYY') + moment(component.occurenceTime).format(' - hh:mm A');
       component.scrollChat();
       component.submitType = 'SUBMIT_DATE';
-    }, 1500);
+    }, delay);
   }
-  
-  onSelectDate(event){
-    this.occurenceDate = event.value;
-    this.userInput = moment(this.occurenceDate).format('DD MMMM, YYYY') + moment(this.occurenceTime).format(' - hh:mm A');
-  }
-
-  onSelectTime(event){
-    this.occurenceTime = event.value;
-    this.userInput = moment(this.occurenceDate).format('DD MMMM, YYYY') + moment(this.occurenceTime).format(' - hh:mm A');
-  }
-
 
   onSubmitDateAndTime(){
     let component = this;
@@ -483,15 +453,17 @@ export class ClaimWithIreneComponent implements OnInit {
       component.askConfirmationOnDeductable();
   }
 
-  askConfirmationOnDeductable(){
+  askConfirmationOnDeductable(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene11.
         replace('AMOUNT', '123');
       component.messages[component.messages.length - 1].loader = false;
       component.userActions.confirmDeductable = true;
       component.scrollChat();
-    }, 1500);
+    }, delay);
   }
 
   onConfirmDeductable(confirmed){
@@ -513,6 +485,8 @@ export class ClaimWithIreneComponent implements OnInit {
 
   askToUploadSelfieVideo(){
     let component = this;
+    component.rewindMessages();
+    component.initiUserActions();
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene12;
       component.messages[component.messages.length - 1].loader = false;
@@ -521,15 +495,17 @@ export class ClaimWithIreneComponent implements OnInit {
     }, 1500);
   }
 
-  askPlaceOfIncident(){
+  askPlaceOfIncident(delay=1500, slice?){
     let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene13;
       component.messages[component.messages.length - 1].loader = false;
       component.initMapAutoComplete();
       component.submitType = 'SUBMIT_PLACE';
       component.scrollChat();
-    }, 1500);
+    }, delay);
   }
 
   onSubmitPlace(place){
@@ -573,30 +549,115 @@ export class ClaimWithIreneComponent implements OnInit {
 
   }
 
-  undoChat(stage) {
+  undoChat(stage, slice) {
+    console.log(slice)
     switch (stage) {
       case 'ASK_TO_SELECT_POLICY':
-        this.pushData('sent message loading new', null, true);
-        this.askUserToSelectPolicy(0);
+        this.askUserToSelectPolicy(0, slice);
         return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
-      case 'ASK_TO_SELECT_POLICY':
-        this.welcomeUser(); return;
+      case 'ASK_USER_WHAT_HPND':
+        this.askUserWhatHappened(0, slice);
+        return;
+      case 'ASK_USER_CLAIM_REASON':
+        this.askUserAboutClaimReason(0, slice);
+        return;
+      case 'ASK_USER_IMEI_BLCK':
+        this.askUserToConfirmIMEIBlockage(0, slice);
+        return;
+      case 'ASK_USER_DMG_TYPE':
+        this.askAboutDamageType(0, slice);
+        return;
+      case 'ASK_USER_HOW_DMG':
+        this.askHowDamageOccured(0, slice);
+        return;
+      case 'ASK_USER_CNFRM_WARNTY':
+        this.askMobileIsUnderWarranty(0, slice);
+        return;
+      case 'ASK_USER_DATE_TIME':
+        this.askAboutDateOfIncident(0, slice);
+        return;
+      case 'ASK_USER_PLACE_INCDNT':
+        this.askPlaceOfIncident(0, slice);
+        return;
+      case 'ASK_USER_CNFRM_DEDUCTABLE':
+        this.askConfirmationOnDeductable(0, slice);
+        return;
+      default: 
+        this.messages[this.messages.length - 1].loader = false;
+      
+    }
+  }
+
+  onSelectDate(event){
+    this.occurenceDate = event.value;
+    this.userInput = moment(this.occurenceDate).format('DD MMMM, YYYY') + moment(this.occurenceTime).format(' - hh:mm A');
+  }
+
+  onSelectTime(event){
+    this.occurenceTime = event.value;
+    this.userInput = moment(this.occurenceDate).format('DD MMMM, YYYY') + moment(this.occurenceTime).format(' - hh:mm A');
+  }
+
+  rewindMessages(slice?){
+    if(slice){
+      let component = this;
+      component.messages = component.messages.slice(0, slice);
+      component.start = component.messages.length;
+    }
+  }
+
+  initiUserActions(slice?){
+    if(slice){
+      this.userActions = {
+        'purpose': false,
+        'claimType': false,
+        'claimReason': false,
+        'confirmIMEI': false,
+        'selectDamageType': false,
+        'selectDamageHow': false,
+        'warrantyConfirm': false,
+        'selectDate': false,
+        'selectTime': false,
+        'confirmDeductable': false,
+        'uploadSelfieVideo': false,
+        'selectPlace': false
+      }
+    }
+  }
+
+  types: Array<any>;
+  submitType = '';
+  onSelectDamageType(type, evt){
+    this.disableSubmit = true;
+    let index = this.types.indexOf(type);
+
+    if($(evt.target).hasClass('border-button'))
+      $(evt.target).removeClass('border-button');
+    else
+      $(evt.target).addClass('border-button');
+    
+    if(index > -1)
+      this.types.splice(index, 1);
+    else
+      this.types.push(type)
+
+    this.helpText = '';
+    for(let item of this.types)
+      this.helpText += item.label + ', ';
+    this.disableSubmit = (this.types.length == 0);
+    this.submitType = 'SUBMIT_DAMAGE';
+  }
+
+  onSend(){
+    this.helpText = '';
+    if(this.submitType == 'SUBMIT_DAMAGE'){
+      this.onSubmitDamageType();
+    }else if(this.submitType == 'SUBMIT_DATE'){
+      this.onSubmitDateAndTime();
+    }else if(this.submitType == 'SUBMIT_PLACE'){
+      let event = $.Event('keypress');
+      event.which = 13;
+      $('#googleAutoComplete').trigger(event);
     }
   }
 

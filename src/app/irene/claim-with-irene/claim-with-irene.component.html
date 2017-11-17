@@ -9,14 +9,14 @@
         </div>
         <div class="messages">
           <ul>
-            <li *ngFor="let msg of messages" class="{{msg.type}}">
+            <li *ngFor="let msg of messages; let i = index;" class="{{msg.type}}">
               <img *ngIf="checkIrene(msg.type)" src="../assets/images/irene.png" alt="" />
               <img *ngIf="!checkIrene(msg.type)" src="{{userData.ProfileLink}}" alt="" />
               <p *ngIf="msg.loader">
                 <span></span>
               </p>
               <p *ngIf="msg.text">
-                <a (click)="undoChat(msg.undo)" href="javascript:void(0)" *ngIf="msg.undo" class="closeButton"></a>
+                <a (click)="undoChat(msg.undo, i)" href="javascript:void(0)" *ngIf="msg.undo" class="closeButton"></a>
                 {{msg.text}}
               </p>
             </li>
