@@ -187,6 +187,9 @@ export const AppLabels = { // modify this for changing laguage
         'irene12' : 'Upload a selfie video describing the incident',
         'irene13' : 'Place of incident',
 
+        'irene14': 'For XXXX, blocking of IMEI number is mandatory. For more concern please contact customer care',
+        'irene15': 'To proceed deduction of XXXX IDR is mandatory. For more concern please contact customer care',
+
         'rep1': 'I would like to file a claim',
         'rep2': 'DEVICE_NAME',
         'rep3': 'DAMAGE_TYPE',
@@ -196,9 +199,11 @@ export const AppLabels = { // modify this for changing laguage
         'rep6': 'DAMAGE_PART',
         'rep7': 'HOW',
         'rep8': 'Yes, It is',
-        'rep9': ' No, It isn',
+        'rep9': ' No, It not',
         'rep10': 'The incident took place on DATE_TIME',
-        'rep11': 'Yes, I would like to proceed',
+        'rep11a': 'Yes, I will pay',
+        'rep11b': 'No, I wont pay',
+        'rep12': 'The incident took place on INCCIDENT_PLACE',
         
     }
 }

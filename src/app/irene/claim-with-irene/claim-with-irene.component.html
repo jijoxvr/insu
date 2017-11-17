@@ -27,12 +27,12 @@
               <owl-date-time (onSelect)="onSelectTime($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="timer"></owl-date-time>
             </li>
             <li *ngIf="userActions.purpose" class="send" style="padding-top: 60px;text-align: center;">
-              <button *ngIf="userPolicies.length > 0" [@zoomInUp1]="''" (click)="onClaimChoice()" class="btn chat-button btn-primary">Claim</button>
-              <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Activate</button>
+              <button *ngIf="userPolicies.length > 0" [@zoomInUp1]="''" (click)="onClaimChoice()" class="btn chat-button btn-primary">I want to make a Claim</button>
+              <!-- <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Activate</button> -->
             </li>
             <li *ngIf="userActions.confirmIMEI" class="send" style="padding-top: 60px;text-align: center;">
               <button [@zoomInUp1]="''" (click)="onConfirmingIMEIBlockage(true)" class="btn chat-button btn-primary">Accept</button>
-              <button [@zoomInUp2]="''" class="btn chat-button btn-primary">Deny</button>
+              <button [@zoomInUp2]="''" (click)="onConfirmingIMEIBlockage(false)" class="btn chat-button btn-primary">Deny</button>
             </li>
             <li *ngIf="userActions.claimType" class="send" style="padding-top: 60px;text-align: center;">
               <button [@zoomInUp1]="''" *ngFor="let reason of claimMainReason; let i = index" (click)="onClaimTypeChoice(reason)" class="btn chat-button btn-primary">{{reason.label}}</button>
@@ -62,7 +62,8 @@
 
         <div class="message-input">
           <div class="wrap">
-            <input [(ngModel)]="userInput" #search [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
+            <input *ngIf="!userActions.selectPlace" [(ngModel)]="userInput" [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
+            <input id="googleAutoComplete" *ngIf="userActions.selectPlace" [(ngModel)]="userInput" #search  type="text" placeholder="{{helpText}}" />
             <div id="claimSelect" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
                 <li *ngFor="let item of userPolicies">
