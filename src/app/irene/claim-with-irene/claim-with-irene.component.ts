@@ -78,7 +78,7 @@ export class ClaimWithIreneComponent implements OnInit {
     'selectDate': false,
     'selectTime': false,
     'confirmDeductable': false,
-    'uploadSelfieVideo': false,
+    'uploadSelfieVideo': true,
     'selectPlace': false
   }
 
@@ -495,10 +495,15 @@ export class ClaimWithIreneComponent implements OnInit {
     }, 1500);
   }
 
+  onSubmitVideo(video){
+    console.log(video)
+  }
+
   askPlaceOfIncident(delay=1500, slice?){
     let component = this;
     component.rewindMessages(slice);
     component.initiUserActions(slice);
+    component.userActions.selectPlace = true;
     setTimeout(function () {
       component.messages[component.messages.length - 1].text = AppLabels.irene.irene13;
       component.messages[component.messages.length - 1].loader = false;

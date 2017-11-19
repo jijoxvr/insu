@@ -59,7 +59,7 @@ height :325px !important;
 }
 
 @media only screen and (min-width : 1224px) {
-    body{
+    .dashboar-layout{
         zoom: .8;
     }
 }

@@ -26,10 +26,11 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // set the initial state of the video
+    this.initRecorder();
+  }
+
+  initRecorder(){
     let video: HTMLVideoElement = this.video.nativeElement;
-    video.muted = false;
-    video.controls = true;
-    video.autoplay = false;
     navigator.mediaDevices
     .getUserMedia({
       video: {
@@ -42,14 +43,21 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
       audio: true
     })
     .then(this.successCallback.bind(this), this.errorCallback.bind(this));
-    
   }
 
   toggleControls() {
     let video: HTMLVideoElement = this.video.nativeElement;
-    video.muted = !video.muted;
-    video.controls = !video.controls;
-    video.autoplay = !video.autoplay;
+  }
+
+  playVideo(){
+    let video: HTMLVideoElement = this.video.nativeElement;
+    video.play();    
+  }
+
+  recordAgain(){
+    this.isRecording = false;
+    this.isRecordingCompleted = false;
+    this.initRecorder();
   }
 
   successCallback(stream: MediaStream) {
@@ -61,14 +69,14 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     };
     this.stream = stream;
     this.recordRTC = RecordRTC(stream, options);
+    let video: HTMLVideoElement = this.video.nativeElement;
+    video.src = window.URL.createObjectURL(this.stream);
   }
 
-  startRecording(stream: MediaStream){
+  startRecording(){
     this.recordRTC.startRecording();
     this.isRecording = true;
     this.isRecordingCompleted = false;
-    let video: HTMLVideoElement = this.video.nativeElement;
-    video.src = window.URL.createObjectURL(stream);
     this.toggleControls();
   }
 

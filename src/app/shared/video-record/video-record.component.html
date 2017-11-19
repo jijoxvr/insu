@@ -1,12 +1,20 @@
 <div class="row">
-  <video  #video class="video col-md-12">
-    <!-- <video #video class="video"></video> -->
-  </video>
-  <div class="col-md-12">
-    <div class="video-controls">
-      <button *ngIf="!isRecording" class="btn btn-default kupu-pink" (click)="startRecording()"> Record </button>
-      <button *ngIf="isRecording" class="btn btn-default kupu-pink" (click)="stopRecording()"> Stop</button>
-      <button *ngIf="isRecordingCompleted" class="btn btn-default kupu-pink" (click)="submitRecording()"> Submit</button>
-    </div>
+  <video  #video class="video col-md-12"></video>
+  <div class="video-controls">
+    <button data-toggle="tooltip" title="Start" *ngIf="!isRecording && !isRecordingCompleted" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="startRecording()"> 
+        <i class="fa fa-3x fa-circle faa-passing-reverse"></i> 
+    </button>
+    <button data-toggle="tooltip" title="Stop" *ngIf="isRecording" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="stopRecording()"> 
+        <i class="fa fa-3x fa-stop-circle faa-passing-reverse"></i>
+    </button>
+    <button data-toggle="tooltip" title="Play" *ngIf="isRecordingCompleted" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="playVideo()"> 
+        <i class="fa fa-3x fa-play-circle faa-passing-reverse"></i>
+    </button>
+    <button data-toggle="tooltip" title="Submit" *ngIf="isRecordingCompleted" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="submitRecording()"> 
+        <i class="fa fa-3x fa-check-circle faa-passing-reverse"></i>
+    </button>
+    <button data-toggle="tooltip" title="Record again" *ngIf="isRecordingCompleted" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="recordAgain()"> 
+        <i class="fa fa-3x fa-undo faa-passing-reverse"></i>
+    </button>
   </div>
 </div>
