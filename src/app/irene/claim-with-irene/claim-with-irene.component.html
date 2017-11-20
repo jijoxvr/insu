@@ -51,10 +51,23 @@
               <button [@zoomInUp1]="''" (click)="onConfirmDeductable(true)" class="btn chat-button btn-primary">Yes</button>
               <button [@zoomInUp2]="''" (click)="onConfirmDeductable(false)" class="btn chat-button btn-primary">No</button>
             </li>
+            <li *ngIf="userActions.policeReportConfirm" class="send" style="padding-top: 60px;text-align: center;">
+              <button [@zoomInUp1]="''" (click)="onConfirmPoliceReport(true)" class="btn chat-button btn-primary">Yes</button>
+              <button [@zoomInUp2]="''" (click)="onConfirmPoliceReport(false)" class="btn chat-button btn-primary">No</button>
+            </li>
             <li *ngIf="userActions.uploadSelfieVideo" style="padding-top: 60px;text-align: center;">
               <button (click)="tryRecording=true" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default btn-circle btn-xl kupu-pink">
                 <i class="fa fa-video-camera faa-passing-reverse animated"></i>
               </button>
+            </li>
+            <li *ngIf="userActions.uploadPoliceReport" style="padding-top: 60px;text-align: center;">
+              <button (click)="triggerFileUpload()" data-toggle="modal" class="btn btn-default btn-circle btn-xl kupu-pink">
+                <i class="fa fa-file faa-passing-reverse animated"></i>
+              </button>
+              <input id='fileid' accept="images/*" style="display: none" type='file' hidden/>
+            </li>
+            <li *ngIf="uploadProgress && uploadProgress < 100" style="padding-top: 60px;text-align: center;" >
+              <circle-progress [percent]="uploadProgress" [radius]="'20'" ></circle-progress>
             </li>
           </ul>
         </div>

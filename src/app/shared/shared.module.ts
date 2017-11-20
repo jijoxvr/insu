@@ -35,7 +35,7 @@ import { LoaderComponent } from './loader/loader.component';
     CookieService,
     CurrencyPipe,
     ByteFormatPipe,
-    DatePipe
+    DatePipe,
   ]
 })
 export class SharedModule { }

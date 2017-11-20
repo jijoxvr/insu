@@ -12,6 +12,8 @@ import { FacebookModule } from 'ngx-facebook';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AgmCoreModule } from '@agm/core';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { Uploader }      from 'angular2-http-file-upload';
 
 import { AppRouting } from './app.routing';
 import { SharedModule } from './shared/shared.module';
@@ -54,6 +56,15 @@ export const firebaseConfig = {
       apiKey: "AIzaSyCA0wo7qYwenWNCWUsBhkmWGRQBI2CiqoM",
       libraries: ["places"]
     }),
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 20,
+      outerStrokeWidth: 10,
+      innerStrokeWidth: 8,
+      outerStrokeColor: "#ff386a",
+      innerStrokeColor: "rgba(255, 56, 102, 0.3)",
+      animationDuration: 0,
+    }),
     FacebookModule.forRoot(),
   ],
   providers: [
@@ -62,7 +73,8 @@ export const firebaseConfig = {
     UserServiceService,
     UserResolver,
     MasterResolver,
-    AppConfigService
+    AppConfigService,
+    Uploader
   ],
   bootstrap: [AppComponent]
 })

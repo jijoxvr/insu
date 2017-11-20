@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 import { SharedModule } from "../shared/shared.module";
 import { DashboardComponent } from "./dashboard.component";
@@ -15,6 +16,9 @@ import { ClaimsModule } from "../claims/claims.module";
   ],
   declarations: [
     DashboardComponent,
+  ],
+  providers: [
+    CurrencyPipe, DatePipe
   ],
   exports: [
       DashboardComponent,

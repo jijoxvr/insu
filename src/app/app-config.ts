@@ -1,7 +1,8 @@
 export const AppConfig = { 
     'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
     // 'apiBaseUrl': "http://localhost:3000/", // modify this to change API base url
-    'defaultCurrency': 'IDR' // modify this to change currency
+    'defaultCurrency': 'IDR', // modify this to change currency
+    'uploadFile': 'https://www.octerine.com/api/UploadUserDoc/'
 
 }
 
@@ -12,7 +13,8 @@ export const APIUrls = { // modify this only when service URL changes
     "insuranceList": "policyForClaim/",
     "claimList": "userClaim/",
     "addnewClaim": "submitForClaim/",
-    "claimReason": "reasonForClaim/"
+    "claimReason": "reasonForClaim/",
+    "dashboardInfo": "dashboard/"
 }
 
 export const SvgIcons = {
@@ -174,7 +176,7 @@ export const AppLabels = { // modify this for changing laguage
 
     'irene': {
         'irene1': 'Hi USER_NAME',
-        'irene2': 'How may i assist you?',
+        'irene2': 'How may I assist you?',
         'irene3' : 'Please choose your policy, I will help you to get this claim sorted out in no time',
         'irene4' : 'Tell me USER_NAME, what really happened?',
         'irene5' : 'Sorry to hear that.. What are you claiming for?',
@@ -186,9 +188,12 @@ export const AppLabels = { // modify this for changing laguage
         'irene11' : 'You have to pay the deductible of AMOUNT IDR for your claim. Do you want to proceed?',
         'irene12' : 'Upload a selfie video describing the incident',
         'irene13' : 'Place of incident',
-
+        
         'irene14': 'For XXXX, blocking of IMEI number is mandatory. For more concern please contact customer care',
         'irene15': 'To proceed deduction of XXXX IDR is mandatory. For more concern please contact customer care',
+        'irene16' : 'Did you file police report that states the details of break-in',
+        'irene17': 'To proceed police report is mandatory. Please report to nearby police station',
+        'irene18': 'Please upload a copy of police report',
 
         'rep1': 'I would like to file a claim',
         'rep2': 'DEVICE_NAME',
@@ -204,6 +209,10 @@ export const AppLabels = { // modify this for changing laguage
         'rep11a': 'Yes, I will pay',
         'rep11b': 'No, I wont pay',
         'rep12': 'The incident took place on INCCIDENT_PLACE',
+        'rep13a': 'Yes, I filed it',
+        'rep13b' : "No, I didn't",
+        'rep14' : "FILE_NAME",
+        'rep15' : "VIDEO_NAME"
         
     }
 }

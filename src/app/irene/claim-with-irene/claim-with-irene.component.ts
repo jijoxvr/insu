@@ -7,7 +7,11 @@ import { AjaxService } from "../../shared/ajax-api/ajax.service";
 import { AppLabels, APIUrls } from "../../app-config";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { Observable } from 'rxjs/Observable';
+import { Uploader }      from 'angular2-http-file-upload';
+import { UploadFileService }  from '../../shared/ajax-api/upload-file.service';
 import * as moment from "moment";
+import 'firebase/storage';
+import * as firebase from 'firebase/app';
 import 'rxjs/add/observable/forkJoin';
 declare var $: any;
 
@@ -78,8 +82,10 @@ export class ClaimWithIreneComponent implements OnInit {
     'selectDate': false,
     'selectTime': false,
     'confirmDeductable': false,
-    'uploadSelfieVideo': true,
-    'selectPlace': false
+    'uploadSelfieVideo': false,
+    'selectPlace': false,
+    'policeReportConfirm': false,
+    'uploadPoliceReport' : false,
   }
 
   claimMainReason = [];
@@ -98,7 +104,7 @@ export class ClaimWithIreneComponent implements OnInit {
   constructor(public userServiceService: UserServiceService,
     public ajaxService: AjaxService, private appConfigService: AppConfigService,
     private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone) {
+    private ngZone: NgZone, public uploaderService: Uploader) {
     this.userServiceService.userObservable.subscribe(user => {
       this.userData = user;
     })
@@ -453,6 +459,107 @@ export class ClaimWithIreneComponent implements OnInit {
       component.askConfirmationOnDeductable();
   }
 
+  askPlaceOfIncident(delay=1500, slice?){
+    let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
+    component.userActions.selectPlace = true;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene13;
+      component.messages[component.messages.length - 1].loader = false;
+      component.initMapAutoComplete();
+      component.submitType = 'SUBMIT_PLACE';
+      component.scrollChat();
+    }, delay);
+  }
+
+  onSubmitPlace(place){
+    let component = this;
+    component.dataToServer.place = place;
+    component.pushData('replies', AppLabels.irene.rep12.replace('INCCIDENT_PLACE', component.userInput), false, 'ASK_USER_PLACE_INCDNT');
+    component.userActions.selectPlace = false;
+    component.userInput = '';
+    component.pushData('sent message loading new', null, true);
+    component.scrollChat();
+    component.askConfirmPoliceReport();
+  }
+
+  askConfirmPoliceReport(delay=1500, slice?){
+    let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene16;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.policeReportConfirm = true;
+      component.scrollChat();
+    }, delay);
+  }
+
+  onConfirmPoliceReport(confirmed){
+    let component = this;
+    component.userActions.policeReportConfirm = false;
+    if(confirmed){
+      component.pushData('replies', AppLabels.irene.rep13a, false, 'ASK_USER_CNFRM_POLICE_REPORT');
+      component.pushData('sent message loading new', null, true);
+      component.scrollChat();
+      component.askToUploadPoliceReport();
+    }else{
+      component.pushData('replies', AppLabels.irene.rep13b, false, 'ASK_USER_CNFRM_POLICE_REPORT');
+      component.pushData('sent message loading new', null, true);
+      component.scrollChat();
+      component.askToContactCustomerCare(AppLabels.irene.irene17);
+    }
+  }
+
+
+  askToUploadPoliceReport(delay=1500, slice?){
+    let component = this;
+    component.rewindMessages(slice);
+    component.initiUserActions(slice);
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene18;
+      component.messages[component.messages.length - 1].loader = false;
+      component.userActions.uploadPoliceReport = true;
+      component.scrollChat();
+    }, delay);
+  }
+
+  uploadProgress = 0;
+  policereportFileName = '';
+
+  uploadPoliceReport(){
+    this.userActions.uploadPoliceReport = false;
+    let uploadFile = (<HTMLInputElement>window.document.getElementById('fileid')).files[0];
+    let path = 'claim/' + this.dataToServer.policy + '/police-report/' + uploadFile.name;
+    let storageRef = firebase.storage().ref().root.child(path);
+    let uploadTask = storageRef.put(uploadFile);
+    this.policereportFileName = uploadFile.name
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        this.uploadProgress = (uploadTask.snapshot.bytesTransferred / uploadTask.snapshot.totalBytes) * 100;
+        this.scrollChat();
+      }, (error) => {
+        // upload failed
+          console.log('error')
+      }, () => {
+        // upload success
+        this.dataToServer.fir = uploadTask.snapshot.downloadURL;
+        this.scrollChat();
+        this.onPoliceReportUploadComplete();
+      }
+    );
+  }
+
+  onPoliceReportUploadComplete(){
+    let component = this;
+    component.pushData('replies', AppLabels.irene.rep14.replace('FILE_NAME', component.policereportFileName), false, 'ASK_TO_UPLOAD_POLICE_REPORT');
+    component.pushData('sent message loading new', null, true);
+    component.scrollChat();
+    component.askConfirmationOnDeductable();
+  }
+
+
   askConfirmationOnDeductable(delay=1500, slice?){
     let component = this;
     component.rewindMessages(slice);
@@ -496,32 +603,27 @@ export class ClaimWithIreneComponent implements OnInit {
   }
 
   onSubmitVideo(video){
-    console.log(video)
+    let path = 'claim/' + this.dataToServer.policy + '/' + 'video' + '/' + 'video.webm';
+    let storageRef = firebase.storage().ref().root.child(path);
+    let uploadTask = storageRef.put(video);
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        this.uploadProgress = (uploadTask.snapshot.bytesTransferred / uploadTask.snapshot.totalBytes) * 100;
+      }, (error) => {
+        // upload failed
+      }, () => {
+        // upload success.
+        this.dataToServer.videoUrl = uploadTask.snapshot.downloadURL;
+        this.scrollChat();
+      }
+    );
   }
 
-  askPlaceOfIncident(delay=1500, slice?){
+  onVideoUploadComplete(){
     let component = this;
-    component.rewindMessages(slice);
-    component.initiUserActions(slice);
-    component.userActions.selectPlace = true;
-    setTimeout(function () {
-      component.messages[component.messages.length - 1].text = AppLabels.irene.irene13;
-      component.messages[component.messages.length - 1].loader = false;
-      component.initMapAutoComplete();
-      component.submitType = 'SUBMIT_PLACE';
-      component.scrollChat();
-    }, delay);
-  }
-
-  onSubmitPlace(place){
-    let component = this;
-    component.dataToServer.place = place;
-    component.pushData('replies', AppLabels.irene.rep12.replace('INCCIDENT_PLACE', component.userInput), false, 'ASK_USER_PLACE_INCDNT');
-    component.userActions.selectPlace = false;
-    component.userInput = '';
+    component.pushData('replies', AppLabels.irene.rep15.replace('VIDEO_NAME', component.policereportFileName), false, 'ASK_TO_UPLOAD_SELFIE_VIDEO');
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
-    component.askConfirmationOnDeductable();
   }
 
 
@@ -555,7 +657,8 @@ export class ClaimWithIreneComponent implements OnInit {
   }
 
   undoChat(stage, slice) {
-    console.log(slice)
+    $('.dropup').removeClass('open');
+    $('.messages').removeClass('messagesContainer');
     switch (stage) {
       case 'ASK_TO_SELECT_POLICY':
         this.askUserToSelectPolicy(0, slice);
@@ -587,6 +690,11 @@ export class ClaimWithIreneComponent implements OnInit {
       case 'ASK_USER_CNFRM_DEDUCTABLE':
         this.askConfirmationOnDeductable(0, slice);
         return;
+      case 'ASK_USER_CNFRM_POLICE_REPORT':
+        this.askConfirmPoliceReport(0, slice);
+        return;
+      case 'ASK_TO_UPLOAD_POLICE_REPORT':
+        this.askToUploadPoliceReport(0, slice);
       default: 
         this.messages[this.messages.length - 1].loader = false;
       
@@ -625,7 +733,9 @@ export class ClaimWithIreneComponent implements OnInit {
         'selectTime': false,
         'confirmDeductable': false,
         'uploadSelfieVideo': false,
-        'selectPlace': false
+        'selectPlace': false,
+        'policeReportConfirm': false,
+        'uploadPoliceReport' : false,
       }
     }
   }
@@ -756,4 +866,35 @@ export class ClaimWithIreneComponent implements OnInit {
     if(c && c[0] == 'sent') return true;
     return false;
   }
+
+  triggerFileUpload(){
+    $('#fileid').click();
+    $('#fileid').unbind('change');
+    let component = this;
+    $('#fileid').change(function(){
+      component.uploadPoliceReport()
+    })
+  }
+
+  // onSubmitPoliceReport(){
+  //     let uploadFile = (<HTMLInputElement>window.document.getElementById('fileid')).files[0];
+    
+  //     let myUploadItem = new UploadFileService(uploadFile);
+  //     myUploadItem.formData = { FormDataKey: 'Form Data Value' };  // (optional) form data can be sent with file
+
+  //     this.uploaderService.onSuccessUpload = (item, response, status, headers) => {
+  //         // success callback
+  //         console.log('here')
+  //     };
+  //     this.uploaderService.onErrorUpload = (item, response, status, headers) => {
+  //         // error callback
+  //         console.log('h1')
+  //     };
+  //     this.uploaderService.onCompleteUpload = (item, response, status, headers) => {
+  //         // complete callback, called regardless of success or failure
+  //         console.log('h2')
+  //     };
+
+  //     this.uploaderService.upload(myUploadItem);
+  // }
 }
