@@ -1,117 +1,142 @@
 <div class="main-content">
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header" data-background-color="kupu-pink">
-                    <h4 class="title">Edit Profile</h4>
-                    <p class="category">Complete your profile</p>
-                </div>
-                <div class="card-content">
-                    <form>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Fist Name</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Last Name</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Company (disabled)</label>
-                                    <input type="text" class="form-control" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Username</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Email address</label>
-                                    <input type="email" class="form-control" >
-                                </div>
-                            </div>
-                        </div>
-
-                        
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Adress</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">City</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Country</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Postal Code</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>About Me</label>
-                                    <div class="form-group form-black label-floating is-empty">
-                                        <label class="control-label"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header" data-background-color="kupu-pink">
+                        <h4 class="title">Edit Profile</h4>
+                        <p class="category">Complete your profile</p>
+                    </div>
+                    <div class="card-content">
+                        <form>
+                            <fieldset>
+                                <legend>Personal</legend>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Fist Name</label>
+                                            <input #firstName="ngModel" required minlength="4" forbiddenName="bob" name="firstName" [(ngModel)]="userData.FirstName"
+                                                type="text" class="form-control">
+                                            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="">
+                                                <div *ngIf="firstName.errors.required">
+                                                    Name is required.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Last Name</label>
+                                            <input name="lastName" [(ngModel)]="userData.LastName" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Phone Number</label>
+                                            <input name="postal" [(ngModel)]="userData.Users_PhoneNumber" type="text" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Birthday</label>
+                                            <input name="birthDay" [(ngModel)]="userData.BirthDateFormated" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Username</label>
+                                            <input name="userName" [(ngModel)]="userData.LastName" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Email address</label>
+                                            <input name="email" [(ngModel)]="userData.Email" type="email" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <button style="background-color: #ee366a" type="submit" class="btn btn-danger pull-right">Update Profile</button>
-                        <div class="clearfix"></div>
-                    </form>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Adress Line 1</label>
+                                            <input name="address" [(ngModel)]="userData.AddressLine" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Adress Line 2</label>
+                                            <input name="address1" [(ngModel)]="userData.AddressLine1" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">City</label>
+                                            <input name="locality" [(ngModel)]="userData.Locality" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Country</label>
+                                            <input name="country" [(ngModel)]="userData.Country" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Postal Code</label>
+                                            <input name="postal" [(ngModel)]="userData.Postal" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Documents</legend>
+
+                            </fieldset>
+
+                            <!-- <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>About Me</label>
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
+                                            <textarea class="form-control" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <button style="background-color: #ee366a" type="submit" class="btn btn-danger pull-right">Update Profile</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-profile">
-                <div class="card-avatar">
-                    <a>
-                        <img class="img" src="../assets/images/group1.png" />
-                    </a>
-                </div>
-                <div class="content">
-                    <h6 class="category text-gray">Whatzapp group</h6>
-                    <h4 class="card-title">Bali Lovers</h4>
-                    <p class="card-content">
-                        Memebers : 250
-                    </p>
-                    <a href="#" class="btn btn-primary btn-round">Visit</a>
+            <div class="col-md-4">
+                <div class="card card-profile">
+                    <div class="card-avatar">
+                        <a>
+                            <img class="img" src="../assets/images/group1.png" />
+                        </a>
+                    </div>
+                    <div class="content">
+                        <h6 class="category text-gray">Whatzapp group</h6>
+                        <h4 class="card-title">Bali Lovers</h4>
+                        <p class="card-content">
+                            Memebers : 250
+                        </p>
+                        <a href="#" class="btn btn-primary btn-round">Visit</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

@@ -20,6 +20,7 @@
                 {{msg.text}}
               </p>
             </li>
+            <app-loader *ngIf="submitingClaim"></app-loader>
           </ul>
           <ul>
             <li class="date-time-container" *ngIf="userActions.selectDate">

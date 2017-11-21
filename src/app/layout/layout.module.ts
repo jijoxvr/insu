@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from "@angular/router";
+import { FormsModule } from '@angular/forms';
 
 import { LayoutRouting } from "./layout.routing"
 import { FooterComponent } from './footer/footer.component';
@@ -14,6 +15,7 @@ import { IreneModule } from "../irene/irene.module";
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     DashboardModule,
     LayoutRouting,

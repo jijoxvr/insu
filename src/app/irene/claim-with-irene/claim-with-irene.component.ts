@@ -580,7 +580,7 @@ export class ClaimWithIreneComponent implements OnInit {
       component.pushData('replies', AppLabels.irene.rep11a, false, 'ASK_USER_CNFRM_DEDUCTABLE');
       component.pushData('sent message loading new', null, true);
       component.scrollChat();
-      component.askToUploadSelfieVideo();
+      component.onCompleteProccess();
     }else{
       component.pushData('replies', AppLabels.irene.rep11b, false, 'ASK_USER_CNFRM_DEDUCTABLE');
       component.pushData('sent message loading new', null, true);
@@ -624,6 +624,53 @@ export class ClaimWithIreneComponent implements OnInit {
     component.pushData('replies', AppLabels.irene.rep15.replace('VIDEO_NAME', component.policereportFileName), false, 'ASK_TO_UPLOAD_SELFIE_VIDEO');
     component.pushData('sent message loading new', null, true);
     component.scrollChat();
+  }
+
+  submitingClaim = false;
+
+  onCompleteProccess(){
+    let component = this;
+    setTimeout(function () {
+      component.messages[component.messages.length - 1].text = AppLabels.irene.irene19;
+      component.messages[component.messages.length - 1].loader = false;
+      component.scrollChat();
+      component.submitDataToServer();
+    }, 1500);
+  }
+
+  submitDataToServer(){
+    let component = this;
+    component.scrollChat();
+    let data = Object.assign({}, {
+      'Claim_ClaimDay': moment().date().toString(),
+      'Claim_ClaimMonth': (moment().month() + 1).toString(),
+      'Claim_ClaimYear': moment().year().toString(),
+      'Claim_HourOfIncident' : moment(this.occurenceTime).hours().toString(),
+      'Claim_MinuteOfIncident' : moment(this.occurenceTime).minutes().toString(),
+      'Claim_DayOfIncident': moment(this.occurenceDate).date().toString(),
+      'Claim_MonthOfIncident': moment(this.occurenceDate).month().toString(),
+      'Claim_YearOfIncident': moment(this.occurenceDate).year().toString(),
+      'Claim_Location': this.dataToServer.place ? this.dataToServer.place.formatted_address : "",
+      'Insurance_Id': this.dataToServer.policy.toString(),
+      'Issue_Id': this.dataToServer.mainType.id.toString(),
+      'IssueSub_Id': this.dataToServer.subType.id.toString(),
+      'RefNo': 'CLAIM#1', // currently hard coded
+      'Claim_VideoURL' :this.dataToServer.videoUrl,
+      'Claim_FIR': this.dataToServer.fir,
+      'ClaimSub': []
+    });
+    console.log(data);
+    component.pushData('sent message loading new', null, true);
+    component.submitingClaim = true;
+    component.ajaxService.execute({method:'POST', body: data, url:APIUrls.addnewClaim}).
+      subscribe((data) => {
+        component.submitingClaim = false;
+        let message = AppLabels.irene.irene20.replace('USER_NAME', component.userData.FirstName).
+          replace('CLAIM_NO', data.Details[0].Claim_Id)
+        component.messages[component.messages.length - 1].text = message;
+        component.messages[component.messages.length - 1].loader = false;
+        component.scrollChat();
+      })
   }
 
 

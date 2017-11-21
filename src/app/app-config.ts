@@ -189,11 +189,15 @@ export const AppLabels = { // modify this for changing laguage
         'irene12' : 'Upload a selfie video describing the incident',
         'irene13' : 'Place of incident',
         
+        
         'irene14': 'For XXXX, blocking of IMEI number is mandatory. For more concern please contact customer care',
         'irene15': 'To proceed deduction of XXXX IDR is mandatory. For more concern please contact customer care',
         'irene16' : 'Did you file police report that states the details of break-in',
         'irene17': 'To proceed police report is mandatory. Please report to nearby police station',
         'irene18': 'Please upload a copy of police report',
+
+        'irene19': 'Please wait I am proccessing your claim request',
+        'irene20': "Thanks USER_NAME, We've got everything we need at this point, Your claim number is CLAIM_NO. Please wait for approval",
 
         'rep1': 'I would like to file a claim',
         'rep2': 'DEVICE_NAME',

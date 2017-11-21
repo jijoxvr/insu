@@ -115,7 +115,7 @@
       // static, focused, or autofill floating labels
       &.label-static,
       &.label-floating.is-focused,
-      &.label-floating:not(.is-empty) {
+      &.label-floating:not(.is-emptyy) {
         @include label-static($label-top, $static-font-size, $static-line-height);
       }
       // #559 Fix for webkit/chrome autofill - rule must be separate because it breaks firefox otherwise #731
@@ -200,7 +200,7 @@
   }
 
   // hide label-placeholders when the field is not empty
-  &.label-placeholder:not(.is-empty){
+  &.label-placeholder:not(.is-emptyy){
     label.control-label{
       display: none;
     }
