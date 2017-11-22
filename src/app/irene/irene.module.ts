@@ -5,6 +5,7 @@ import { ClaimWithIreneComponent } from './claim-with-irene/claim-with-irene.com
 import { DateTimePickerModule } from 'ng-pick-datetime';
 import { FormsModule } from '@angular/forms';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { AssistToClaimComponent } from './assist-to-claim/assist-to-claim.component';
 
 
 @NgModule({
@@ -15,7 +16,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     DateTimePickerModule,
     NgCircleProgressModule
   ],
-  declarations: [ClaimWithIreneComponent],
+  declarations: [ClaimWithIreneComponent, AssistToClaimComponent],
   exports: [ClaimWithIreneComponent]
 })
 export class IreneModule { }

@@ -14,7 +14,8 @@ export const APIUrls = { // modify this only when service URL changes
     "claimList": "userClaim/",
     "addnewClaim": "submitForClaim/",
     "claimReason": "reasonForClaim/",
-    "dashboardInfo": "dashboard/"
+    "dashboardInfo": "dashboard/",
+    "getQuestion": "getquestion/"
 }
 
 export const SvgIcons = {

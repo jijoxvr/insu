@@ -15,8 +15,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Fist Name</label>
-                                            <input #firstName="ngModel" required minlength="4" forbiddenName="bob" name="firstName" [(ngModel)]="userData.FirstName"
-                                                type="text" class="form-control">
+                                            <input #firstName="ngModel" required minlength="4" name="firstName" [(ngModel)]="userData.FirstName" type="text" class="form-control">
                                             <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="">
                                                 <div *ngIf="firstName.errors.required">
                                                     Name is required.
@@ -58,8 +57,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group form-black label-floating">
@@ -98,7 +95,45 @@
                             </fieldset>
                             <fieldset>
                                 <legend>Documents</legend>
-
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-8">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">KTP No</label>
+                                            <input name="userId" [(ngModel)]="userData.UserId" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-4">
+                                        <button (click)="triggerFileUpload('ktpFile')" data-toggle="tooltip" data-placement="top" title="Upload KTP" class="btn btn-default btn-circle btn-lg kupu-pink">
+                                            <i class="fa fa-file"></i>
+                                        </button>
+                                        <input id='ktpFile' accept="images/*" style="display: none" type='file' hidden/>
+                                    </div>
+                                    <div class="col-md-4 col-xs-8">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Id No</label>
+                                            <input name="ktpNo" [(ngModel)]="userData.Users_KTP" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-4">
+                                        <button (click)="triggerFileUpload('idFile')" data-toggle="tooltip" data-placement="top" title="Upload ID" class="btn btn-default btn-circle btn-lg kupu-pink">
+                                            <i class="fa fa-file"></i>
+                                        </button>
+                                        <input id='idFile' accept="images/*" style="display: none" type='file' hidden/>
+                                    </div>
+                                    <div class="col-md-4 col-xs-8">
+                                        <div class="form-group form-black label-floating">
+                                            <label class="control-label">Passport No</label>
+                                            <input name="passportNo" [(ngModel)]="userData.Users_Passport" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-4">
+                                        
+                                        <button (click)="triggerFileUpload('passportFile')" data-toggle="tooltip" data-placement="bottom" title="Upload Passport" class="btn btn-default btn-circle btn-lg kupu-pink">
+                                            <i class="fa fa-file"></i>
+                                        </button>
+                                        <input id='passportFile' accept="images/*" style="display: none" type='file' hidden/>
+                                    </div>
+                                </div>
                             </fieldset>
 
                             <!-- <div class="row">

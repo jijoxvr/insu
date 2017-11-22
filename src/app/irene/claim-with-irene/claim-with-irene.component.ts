@@ -580,7 +580,7 @@ export class ClaimWithIreneComponent implements OnInit {
       component.pushData('replies', AppLabels.irene.rep11a, false, 'ASK_USER_CNFRM_DEDUCTABLE');
       component.pushData('sent message loading new', null, true);
       component.scrollChat();
-      component.onCompleteProccess();
+      component.askToUploadSelfieVideo();
     }else{
       component.pushData('replies', AppLabels.irene.rep11b, false, 'ASK_USER_CNFRM_DEDUCTABLE');
       component.pushData('sent message loading new', null, true);
@@ -601,8 +601,10 @@ export class ClaimWithIreneComponent implements OnInit {
       component.scrollChat();
     }, 1500);
   }
-
+  tryRecording = false;
   onSubmitVideo(video){
+    this.tryRecording = false;
+    console.log(video)
     let path = 'claim/' + this.dataToServer.policy + '/' + 'video' + '/' + 'video.webm';
     let storageRef = firebase.storage().ref().root.child(path);
     let uploadTask = storageRef.put(video);

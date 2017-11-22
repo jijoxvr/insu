@@ -1,0 +1,76 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div id="frame">
+      <app-loader *ngIf="loading"></app-loader>
+      <div *ngIf="!loading" class="chatcontent">
+        <div class="contact-profile">
+          <img src="../assets/images/irene.png" alt="" />
+          <p>Irene</p>
+        </div>
+        <div class="messages">
+          <ul>
+            <li *ngFor="let msg of messages; let i = index;" class="{{msg.type}}">
+              <img *ngIf="checkIrene(msg.type)" src="../assets/images/irene.png" alt="" />
+              <img *ngIf="!checkIrene(msg.type)" src="{{userData.ProfileLink}}" alt="" />
+              <p *ngIf="msg.loader">
+                <span></span>
+              </p>
+              <p *ngIf="msg.text">
+                <a (click)="undoChat(msg.undo, i)" href="javascript:void(0)" *ngIf="msg.undo" class="closeButton"></a>
+                {{msg.text}}
+              </p>
+            </li>
+            <app-loader *ngIf="submitingClaim"></app-loader>
+          </ul>
+          <ul>
+            <li class="date-time-container" *ngIf="userActions.selectDate">
+              <owl-date-time (onSelect)="onSelectDate($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="calendar"></owl-date-time>
+              <owl-date-time (onSelect)="onSelectTime($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="timer"></owl-date-time>
+            </li>
+            <li *ngIf="questionOptions" class="send" style="padding-top: 60px;text-align: center;">
+              <button [@zoomInUp1]="''" *ngFor="let item of questionOptions" (click)="onSelectQuestionOptions(item, $event)" class="btn chat-button btn-primary border-button">{{item.QuestionOptionsName}}</button>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="message-input">
+          <div class="wrap">
+            <input *ngIf="!userActions.selectPlace" [(ngModel)]="userInput" [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
+            <input id="googleAutoComplete" *ngIf="userActions.selectPlace" [(ngModel)]="userInput" #search  type="text" placeholder="{{helpText}}" />
+            <div id="claimSelect" class="dropup">
+              <ul [@zoomInUp1]="''" class="dropdown-menu">
+                <li *ngFor="let item of userPolicies">
+                  <a class="custom-drop" (click)="onSelectPolicy(item)" href="javascript:void(0)">{{item.Device}}</a>
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="claimDamageHow" id="claimHowSelect" class="dropup">
+              <ul [@zoomInUp1]="''" class="dropdown-menu">
+                <li *ngFor="let item of claimDamageHow">
+                  <a class="custom-drop" (click)="onSelectHowDamaged(item)" href="javascript:void(0)">{{item.label}}</a>
+                </li>
+              </ul>
+            </div>
+            <button (click)="onSend()" [disabled]="disableSubmit" class="submit">
+              <img src="../assets/images/send.png" width="66px">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div data-backdrop="false" id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body" style="padding: 0px;">
+        <app-video-record (onSubmission)="onSubmitVideo($event)" *ngIf="tryRecording"></app-video-record>
+      </div>
+    </div>
+  </div>
+</div>
