@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit,Output, EventEmitter } from '@angular/core';
 declare var require: any;
 let RecordRTC = require('recordrtc/RecordRTC.min');
+declare var $: any;
 
 @Component({
   selector: 'app-video-record',
@@ -15,7 +16,7 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
   public isRecording: boolean = false;
   public isRecordingCompleted: boolean = false;
   public recordedBlob: any;
-
+  submitMessage = "To submit please record a video greater than 15 seconds"
   @Output()
   public onSubmission =  new EventEmitter<any>();
 
@@ -25,11 +26,14 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
+    $('[data-toggle="tooltip"]').tooltip();
+    
     // set the initial state of the video
     this.initRecorder();
   }
 
   initRecorder(){
+    this.submitMessage = "To submit please record a video greater than 15 seconds"
     let video: HTMLVideoElement = this.video.nativeElement;
     navigator.mediaDevices
     .getUserMedia({
@@ -43,6 +47,7 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
       audio: true
     })
     .then(this.successCallback.bind(this), this.errorCallback.bind(this));
+    $('[data-toggle="tooltip"]').tooltip();
   }
 
   toggleControls() {
@@ -58,6 +63,7 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     this.isRecording = false;
     this.isRecordingCompleted = false;
     this.initRecorder();
+    this.timer = 0;
   }
 
   successCallback(stream: MediaStream) {
@@ -72,12 +78,26 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     let video: HTMLVideoElement = this.video.nativeElement;
     video.src = window.URL.createObjectURL(this.stream);
   }
-
+  timer = 0;
+  counter : any; 
   startRecording(){
+    this.timer = 0;
     this.recordRTC.startRecording();
+    this.counter = this.triggerTimer();
     this.isRecording = true;
     this.isRecordingCompleted = false;
     this.toggleControls();
+  }
+
+  triggerTimer(){
+    return setInterval(()=>{
+      this.timer += 1;
+      if(this.timer > 57){
+        this.stopRecording();
+      }
+      if(this.timer > 14)
+        this.submitMessage = "Click here to submit video"
+    }, 1000);
   }
 
 
@@ -99,18 +119,22 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
 
   stopRecording() {
     this.isRecording = false;
+    clearInterval(this.counter);
     let recordRTC = this.recordRTC;
     recordRTC.stopRecording(this.processVideo.bind(this));
     let stream = this.stream;
     stream.getAudioTracks().forEach(track => track.stop());
     stream.getVideoTracks().forEach(track => track.stop());
     this.isRecordingCompleted = true;
+    $('[data-toggle="tooltip"]').tooltip();
   }
 
   submitRecording() {
-    this.isRecordingCompleted = false;
+    if(this.timer > 15){
+      this.isRecordingCompleted = false;
+      this.onSubmission.emit(this.recordedBlob);
+    }
     // this.recordRTC.save('video.webm');
-    this.onSubmission.emit(this.recordedBlob);
   }
 
 }

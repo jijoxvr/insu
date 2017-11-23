@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, NgZone } from '@angular/core';
 import { UserServiceService } from "../../core/user-service.service";
 import { MapsAPILoader } from '@agm/core';
 import { } from 'googlemaps';
@@ -51,7 +51,7 @@ declare var $: any;
     ]),
   ],
 })
-export class AssistToClaimComponent implements OnInit {
+export class AssistToClaimComponent implements OnInit, AfterViewInit {
 
   userData:any;
   now = new Date()
@@ -62,7 +62,7 @@ export class AssistToClaimComponent implements OnInit {
   claimReason: any;
   claimConfig: any;
   helpText = '';
-  disableSubmit = false;
+  disableSubmit = true;
   disableUserInput = true;
   userInput: any;
 
@@ -72,21 +72,15 @@ export class AssistToClaimComponent implements OnInit {
   }
 
   userActions = {
-    'purpose': false,
-    'claimType': false,
-    'claimReason': false,
-    'confirmIMEI': false,
-    'selectDamageType': false,
-    'selectDamageHow': false,
-    'warrantyConfirm': false,
     'selectDate': false,
-    'selectTime': false,
-    'confirmDeductable': false,
-    'uploadSelfieVideo': false,
     'selectPlace': false,
-    'policeReportConfirm': false,
-    'uploadPoliceReport' : false,
+    'dropDown': false,
+    'multiSelect' : false,
+    'cameraButton': false,
+    'fileUpload': false,
   }
+
+  activeInput = '';
 
   claimMainReason = [];
   claimSubReason = [];
@@ -99,6 +93,9 @@ export class AssistToClaimComponent implements OnInit {
   claimIssueGrouped = {};
 
   questionOptions = [];
+  questionOptionsList = [];
+  uploadProgress = 0;
+  submitId = 0;
 
 
   @ViewChild("search")
@@ -118,6 +115,10 @@ export class AssistToClaimComponent implements OnInit {
     this.getQuestion(0);
   }
 
+  ngAfterViewInit(): void{
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+
 
   getQuestion(input){
     this.pushData('sent message loading new', null, true);
@@ -126,14 +127,12 @@ export class AssistToClaimComponent implements OnInit {
       subscribe(data => {
         let delay = moment.duration(moment().diff(bfTime)).asMilliseconds();
         delay = delay > 1500 ? 0 : (1500 - delay);
-        console.log(delay)
         setTimeout(() => {
           this.processQuestion(data);
         }, delay) 
       }, error => {
 
       })
-
   }
 
   processQuestion(data){
@@ -143,11 +142,18 @@ export class AssistToClaimComponent implements OnInit {
         case 'Q':
           this.bindQuestion(data);
           return;
+        case 'L':
+          this.submitId = data.NextQuestionId;
+          this.bindQuestionList(data)
+          return;
         case 'S':
           this.bindStatement(data);
           return;
         case 'QI':
-          this.bindInput(data)
+          this.submitId = data.NextQuestionId;
+          this.bindInput(data);
+          this.scrollChat();
+          return;
       }
     }
   }
@@ -158,13 +164,77 @@ export class AssistToClaimComponent implements OnInit {
     this.scrollChat();
   }
 
+  bindQuestionList(data){
+    this.setMessage(data.Message);
+    switch(data.UIControlType){
+      case 'multiselect':
+        this.listSubmit = true;
+        this.optList = [];
+        this.activeInput = 'multiSelect';
+        this.userActions.multiSelect = true;
+        this.questionOptionsList = data.QuestionList ? data.QuestionList : [];
+        break;
+      case 'dropdown':
+        this.activeInput = 'dropDown';
+        this.userActions.dropDown = true;
+        this.questionOptionsList = data.QuestionList ? data.QuestionList : [];
+        this.openDropDown();
+        break;
+    }
+    this.scrollChat();
+  }
+
   bindStatement(data){
     this.setMessage(data.Message);
     this.getQuestion(data.NextQuestionId);
   }
 
   bindInput(data){
+    this.disableUserInput = false;
+    this.disableSubmit = false;
     this.setMessage(data.Message);
+    switch(data.UIControlType){
+      case 'datetime':
+        this.activeInput = 'selectDate';
+        this.bindDateTime();
+        return;
+      case 'location-auto':
+        this.activeInput = 'selectPlace';
+        this.bindLocationAutoComplete();
+        return;
+      case 'camera':
+        this.activeInput = 'cameraButton';
+        this.userActions.cameraButton = true
+        return;
+      case 'file':
+        this.activeInput = 'fileUpload';
+        this.userActions.fileUpload = true;
+
+    }
+  }
+
+  bindDateTime(){
+    this.userActions.selectDate = true;
+    this.userInput = moment(this.dateInput).format('DD MMMM, YYYY') + moment(this.timeInput).format(' - hh:mm A');
+  }
+
+  bindLocationAutoComplete(){
+    this.userActions.selectPlace = true;
+    this.mapsAPILoader.load().then(() => {
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          this.userInput = place.formatted_address;
+          this.onSubmitUserInput();
+        });
+      });
+    });
   }
 
   setMessage(msg){
@@ -172,10 +242,27 @@ export class AssistToClaimComponent implements OnInit {
     this.messages[this.messages.length - 1].loader = false;
   }
 
-  onSelectQuestionOptions(data, event){
+  onSelectQuestionOptions(data){
     this.questionOptions = [];
     this.getQuestion(data.QuestionOptionsId);
-    console.log(data)
+  }
+
+  onSelectFromDropDown(value){
+    $('.messages').removeClass('messagesContainer');
+    this.onSubmitUserInput();
+  }
+
+  onSubmitUserInput(){
+    if(this.listSubmit){
+      this.listSubmit = false;
+      this.questionOptionsList = [];
+    }
+    this.userActions[this.activeInput] = false;
+    this.disableUserInput = true;
+    this.disableSubmit = true;
+    this.userInput = '';
+    this.helpText = '';
+    this.getQuestion(this.submitId);
   }
 
   pushData(type, text, loader = false, undo?) {
@@ -187,16 +274,20 @@ export class AssistToClaimComponent implements OnInit {
     })
     this.scrollChat();
   }
+
   dateInput = new Date();
   timeInput = new Date();
+
   onSelectDate(event){
     this.dateInput = event.value;
     this.userInput = moment(this.dateInput).format('DD MMMM, YYYY') + moment(this.timeInput).format(' - hh:mm A');
+    this.dateInput = new Date();
   }
 
   onSelectTime(event){
     this.timeInput = event.value;
     this.userInput = moment(this.dateInput).format('DD MMMM, YYYY') + moment(this.timeInput).format(' - hh:mm A');
+    this.timeInput = new Date() 
   }
 
   scrollChat() {
@@ -207,6 +298,103 @@ export class AssistToClaimComponent implements OnInit {
     let c = string.split(' ');
     if(c && c[0] == 'sent') return true;
     return false;
+  }
+
+  optList: Array<any>;
+  listSubmit = false;
+  onSelectOptionList(type, evt){
+    this.disableSubmit = true;
+    let index = this.optList.indexOf(type);
+    if($(evt.target).hasClass('border-button'))
+      $(evt.target).removeClass('border-button');
+    else
+      $(evt.target).addClass('border-button');
+    
+    if(index > -1)
+      this.optList.splice(index, 1);
+    else
+      this.optList.push(type)
+
+    this.helpText = '';
+    for(let item of this.optList)
+      this.helpText += item.ListName + ', ';
+    this.disableSubmit = (this.optList.length == 0);
+  }
+
+  tryRecording = false;
+  onSubmitVideo(video){
+    this.tryRecording = false;
+    $('#myModal').modal('toggle');
+    this.userActions.cameraButton = false;
+    let path = 'claim/' + this.dataToServer.policy + '/' + 'video' + '/' + 'video.webm';
+    let storageRef = firebase.storage().ref().root.child(path);
+    let uploadTask = storageRef.put(video);
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        this.uploadProgress = (uploadTask.snapshot.bytesTransferred / uploadTask.snapshot.totalBytes) * 100;
+        this.scrollChat();
+      }, (error) => {
+        // upload failed
+      }, () => {
+        // upload success.
+        this.dataToServer.videoUrl = uploadTask.snapshot.downloadURL;
+        this.scrollChat();
+        this.getQuestion(this.submitId);
+      }
+    );
+  }
+
+  uploadFile(){
+    this.userActions.fileUpload = false;
+    let uploadFile = (<HTMLInputElement>window.document.getElementById('fileid')).files[0];
+    let path = 'claim/' + this.dataToServer.policy + '/police-report/' + uploadFile.name;
+    let storageRef = firebase.storage().ref().root.child(path);
+    let uploadTask = storageRef.put(uploadFile);
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        this.uploadProgress = (uploadTask.snapshot.bytesTransferred / uploadTask.snapshot.totalBytes) * 100;
+        this.scrollChat();
+      }, (error) => {
+        // upload failed
+          console.log('error')
+      }, () => {
+        // upload success
+        this.dataToServer.fir = uploadTask.snapshot.downloadURL;
+        this.scrollChat();
+        this.getQuestion(this.submitId);
+      }
+    );
+  }
+
+  openDropDown(){
+    setTimeout(() => {
+      this.helpText = 'Please select';
+      $('#dropMenu').addClass('open');
+      this.preventDropDownClose();
+      this.scrollChat();
+    }, 500);
+  }
+
+  preventDropDownClose() {
+    $('body').on('click', function (e) {
+      if ($('.custom-drop').is(e.target)) {
+        $('.dropup').removeClass('open');
+      }
+    });
+    setTimeout(function(){
+      $('.messages').addClass('messagesContainer');
+      $(".messages").animate({ scrollTop: 100000 }, "fast");
+    }, 200)
+    
+  }
+
+  triggerFileUpload(){
+    $('#fileid').click();
+    $('#fileid').unbind('change');
+    let component = this;
+    $('#fileid').change(function(){
+      component.uploadFile()
+    })
   }
 
 }

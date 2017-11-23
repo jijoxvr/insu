@@ -27,8 +27,25 @@
               <owl-date-time (onSelect)="onSelectDate($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="calendar"></owl-date-time>
               <owl-date-time (onSelect)="onSelectTime($event)" [defaultMoment]="now" inline="true" hourFormat='12' type="timer"></owl-date-time>
             </li>
-            <li *ngIf="questionOptions" class="send" style="padding-top: 60px;text-align: center;">
-              <button [@zoomInUp1]="''" *ngFor="let item of questionOptions" (click)="onSelectQuestionOptions(item, $event)" class="btn chat-button btn-primary border-button">{{item.QuestionOptionsName}}</button>
+            <li *ngIf="userActions.cameraButton" style="padding-top: 60px;text-align: center;">
+                <button (click)="tryRecording=true" data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default btn-circle btn-xl kupu-pink">
+                  <i class="fa fa-video-camera faa-passing-reverse animated"></i>
+                </button>
+            </li>
+            <li *ngIf="questionOptions.length > 0" class="send" style="padding-top: 60px;text-align: center;">
+              <button [@zoomInUp1]="''" *ngFor="let item of questionOptions" (click)="onSelectQuestionOptions(item)" class="btn chat-button btn-primary border-button">{{item.QuestionOptionsName}}</button>
+            </li>
+            <li *ngIf="userActions.multiSelect" class="send" style="padding-top: 60px;text-align: center;">
+              <button [@zoomInUp1]="''" *ngFor="let item of questionOptionsList" (click)="onSelectOptionList(item, $event)" class="btn chat-button btn-primary border-button">{{item.ListName}}</button>
+            </li>
+            <li *ngIf="uploadProgress > 0 && uploadProgress < 100" style="padding-top: 60px;text-align: center;" >
+              <circle-progress [percent]="uploadProgress" [radius]="'20'" ></circle-progress>
+            </li>
+            <li *ngIf="userActions.fileUpload" style="padding-top: 60px;text-align: center;">
+                <button (click)="triggerFileUpload()" class="btn btn-default btn-circle btn-xl kupu-pink">
+                  <i class="fa fa-file faa-passing-reverse animated"></i>
+                </button>
+                <input id='fileid' accept="images/*" style="display: none" type='file' hidden/>
             </li>
           </ul>
         </div>
@@ -38,10 +55,10 @@
           <div class="wrap">
             <input *ngIf="!userActions.selectPlace" [(ngModel)]="userInput" [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
             <input id="googleAutoComplete" *ngIf="userActions.selectPlace" [(ngModel)]="userInput" #search  type="text" placeholder="{{helpText}}" />
-            <div id="claimSelect" class="dropup">
+            <div id="dropMenu" *ngIf="userActions.dropDown" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
-                <li *ngFor="let item of userPolicies">
-                  <a class="custom-drop" (click)="onSelectPolicy(item)" href="javascript:void(0)">{{item.Device}}</a>
+                <li *ngFor="let item of questionOptionsList">
+                  <a class="custom-drop" (click)="onSelectFromDropDown(item)" href="javascript:void(0)">{{item.ListName}}</a>
                 </li>
               </ul>
             </div>
@@ -52,7 +69,7 @@
                 </li>
               </ul>
             </div>
-            <button (click)="onSend()" [disabled]="disableSubmit" class="submit">
+            <button (click)="onSubmitUserInput()" [disabled]="disableSubmit" class="submit">
               <img src="../assets/images/send.png" width="66px">
             </button>
           </div>
@@ -65,11 +82,11 @@
 
 
 <div data-backdrop="false" id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body" style="padding: 0px;">
-        <app-video-record (onSubmission)="onSubmitVideo($event)" *ngIf="tryRecording"></app-video-record>
+        <app-video-record *ngIf="tryRecording" (onSubmission)="onSubmitVideo($event)"></app-video-record>
       </div>
     </div>
   </div>

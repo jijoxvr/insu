@@ -794,7 +794,6 @@ export class ClaimWithIreneComponent implements OnInit {
   onSelectDamageType(type, evt){
     this.disableSubmit = true;
     let index = this.types.indexOf(type);
-
     if($(evt.target).hasClass('border-button'))
       $(evt.target).removeClass('border-button');
     else

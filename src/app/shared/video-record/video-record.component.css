@@ -13,3 +13,10 @@
     left: 40%;
     top: 80%
   }
+
+  .video-timer{
+    position: absolute;
+    z-index: 60000;
+    left: 45%;
+    top: 10%
+  }

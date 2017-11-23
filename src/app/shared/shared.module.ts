@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-
+import { TooltipModule } from "ngx-tooltip";
 import { VideoRecordComponent } from './video-record/video-record.component';
 
 import { AjaxService } from "./ajax-api/ajax.service";
@@ -15,6 +15,7 @@ import { LoaderComponent } from './loader/loader.component';
 @NgModule({
   imports: [
     CommonModule,
+    TooltipModule
   ],
   declarations: [
     VideoRecordComponent,
