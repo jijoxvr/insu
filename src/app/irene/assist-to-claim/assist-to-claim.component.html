@@ -16,6 +16,9 @@
                 <span></span>
               </p>
               <p *ngIf="msg.text">
+                <button *ngIf="msg.play" (click)="playRecording=true" data-toggle="modal" data-target="#playModal" class="btn btn-default btn-circle btn-lg">
+                  <i class="fa fa-play faa-passing-reverse animated"></i>
+                </button>
                 <a (click)="undoChat(msg.undo, i)" href="javascript:void(0)" *ngIf="msg.undo" class="closeButton"></a>
                 {{msg.text}}
               </p>
@@ -91,3 +94,14 @@
     </div>
   </div>
 </div>
+
+<div data-backdrop="false" id="playModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body" style="padding: 0px;">
+          <app-video-record [source]="dataToServer.videoUrl" (onSubmission)="stopPlaying($event)" *ngIf="playRecording"></app-video-record>
+        </div>
+      </div>
+    </div>
+  </div>

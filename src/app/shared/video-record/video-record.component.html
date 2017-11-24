@@ -22,5 +22,9 @@
         *ngIf="isRecordingCompleted" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="recordAgain()"> 
         <i class="fa fa-3x fa-undo faa-passing-reverse"></i>
     </button>
+    <button tooltip="Close" tooltipPlacement="top"  
+        *ngIf="isSourcePlaying" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="stopAndClose()"> 
+        <i class="fa fa-3x fa-undo faa-passing-reverse"></i>
+    </button>
   </div>
 </div>

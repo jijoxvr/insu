@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit,Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, Input, EventEmitter } from '@angular/core';
 declare var require: any;
 let RecordRTC = require('recordrtc/RecordRTC.min');
 declare var $: any;
@@ -16,9 +16,13 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
   public isRecording: boolean = false;
   public isRecordingCompleted: boolean = false;
   public recordedBlob: any;
+  isSourcePlaying = false;
   submitMessage = "To submit please record a video greater than 15 seconds"
   @Output()
   public onSubmission =  new EventEmitter<any>();
+
+  @Input()
+  public source: any;
 
   @ViewChild('video') video;
   constructor() { }
@@ -29,7 +33,23 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     $('[data-toggle="tooltip"]').tooltip();
     
     // set the initial state of the video
-    this.initRecorder();
+    if(this.source){
+      let video: HTMLVideoElement = this.video.nativeElement;
+      video.src = this.source;
+      video.play();
+      this.isSourcePlaying = true;
+    }else{
+      this.initRecorder();
+    }
+    
+  }
+
+  stopAndClose(){
+    let video: HTMLVideoElement = this.video.nativeElement;
+    video.pause();
+    this.isSourcePlaying = false;
+    $('#playModal').modal('toggle');
+    this.onSubmission.emit();
   }
 
   initRecorder(){

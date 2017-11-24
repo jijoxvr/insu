@@ -28,4 +28,4 @@ export const routes: Routes = [{
 
 
 export const AppRouting: ModuleWithProviders =
-     RouterModule.forRoot(routes, {useHash: false});
+     RouterModule.forRoot(routes, {useHash: true});

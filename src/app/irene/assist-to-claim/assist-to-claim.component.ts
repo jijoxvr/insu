@@ -65,6 +65,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   disableSubmit = true;
   disableUserInput = true;
   userInput: any;
+  playRecording = false;
 
   stageIndex = {
     stageOne: 2,
@@ -97,6 +98,11 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   uploadProgress = 0;
   submitId = 0;
 
+  answerId = 0;
+  answerList = [];
+  manualInput = "";
+  claimId = 0;
+
 
   @ViewChild("search")
   public searchElementRef: ElementRef;
@@ -120,14 +126,28 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   }
 
 
-  getQuestion(input){
+  getQuestion(input, answer?, play?){
+    if(answer) this.pushData('replies', answer, false, 'ASK_TO_UPLOAD_SELFIE_VIDEO', play);
     this.pushData('sent message loading new', null, true);
     let bfTime = moment();
-    this.ajaxService.execute({body: {QuestionId: input}, method: 'POST', url:APIUrls.getQuestion}).
+    let dataToServer = {
+      QuestionId: input,
+      AnswerId: this.answerId,
+      Claim_ManualInput: this.manualInput,
+      AnswerList : this.answerList,
+      ClaimId : this.claimId,
+      SqlId: this.userData.UserId
+    }
+    
+    this.ajaxService.execute({body: dataToServer, method: 'POST', url:APIUrls.getQuestion}).
       subscribe(data => {
         let delay = moment.duration(moment().diff(bfTime)).asMilliseconds();
         delay = delay > 1500 ? 0 : (1500 - delay);
         setTimeout(() => {
+          this.answerId = data.QuestionId;
+          this.answerList = [];
+          this.manualInput = "";
+          this.claimId = data.ClaimId;
           this.processQuestion(data);
         }, delay) 
       }, error => {
@@ -209,7 +229,6 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
       case 'file':
         this.activeInput = 'fileUpload';
         this.userActions.fileUpload = true;
-
     }
   }
 
@@ -244,33 +263,49 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
 
   onSelectQuestionOptions(data){
     this.questionOptions = [];
-    this.getQuestion(data.QuestionOptionsId);
+    this.answerList.push({ListId: data.QuestionOptionsId});
+    this.getQuestion(data.QuestionOptionsId, data.QuestionOptionsName);
   }
 
   onSelectFromDropDown(value){
     $('.messages').removeClass('messagesContainer');
-    this.onSubmitUserInput();
+    this.resetInput();
+    this.answerList.push({ListId: value.ListId});
+    this.getQuestion(this.submitId, value.ListName);
   }
 
-  onSubmitUserInput(){
+  onSubmitUserInput(data?){
+    data = data ? data : this.userInput ? this.userInput : "";
     if(this.listSubmit){
       this.listSubmit = false;
       this.questionOptionsList = [];
+      data = ''
+      for(let item of this.optList){
+        data += item.ListName + ', ';
+        this.answerList.push({ListId: item.ListId})
+      }   
+    }else{
+      this.manualInput = data;
     }
+    this.resetInput();
+    this.getQuestion(this.submitId, data);
+  }
+
+  resetInput(){
     this.userActions[this.activeInput] = false;
     this.disableUserInput = true;
     this.disableSubmit = true;
     this.userInput = '';
     this.helpText = '';
-    this.getQuestion(this.submitId);
   }
 
-  pushData(type, text, loader = false, undo?) {
+  pushData(type, text, loader = false, undo?, play?) {
     this.messages.push({
       'type': type,
       'text': text,
       'loader': loader,
       'undo': undo,
+      'play': play
     })
     this.scrollChat();
   }
@@ -288,6 +323,10 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
     this.timeInput = event.value;
     this.userInput = moment(this.dateInput).format('DD MMMM, YYYY') + moment(this.timeInput).format(' - hh:mm A');
     this.timeInput = new Date() 
+  }
+
+  undoChat(stage, slice) {
+
   }
 
   scrollChat() {
@@ -339,7 +378,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
         // upload success.
         this.dataToServer.videoUrl = uploadTask.snapshot.downloadURL;
         this.scrollChat();
-        this.getQuestion(this.submitId);
+        this.getQuestion(this.submitId, 'video submitted', true);
       }
     );
   }
@@ -361,7 +400,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
         // upload success
         this.dataToServer.fir = uploadTask.snapshot.downloadURL;
         this.scrollChat();
-        this.getQuestion(this.submitId);
+        this.getQuestion(this.submitId, uploadFile.name);
       }
     );
   }
@@ -395,6 +434,10 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
     $('#fileid').change(function(){
       component.uploadFile()
     })
+  }
+
+  stopPlaying(){
+    this.playRecording = false;
   }
 
 }
