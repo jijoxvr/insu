@@ -77,7 +77,7 @@
         <div class="message-input">
           <div class="wrap">
             <input *ngIf="!userActions.selectPlace" [(ngModel)]="userInput" [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
-            <input id="googleAutoComplete" *ngIf="userActions.selectPlace" [(ngModel)]="userInput" #search  type="text" placeholder="{{helpText}}" />
+            <input id="googleAutoComplete" *ngIf="userActions.selectPlace" [(ngModel)]="userInput" #search  type="number" placeholder="{{helpText}}" />
             <div id="claimSelect" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
                 <li *ngFor="let item of userPolicies">

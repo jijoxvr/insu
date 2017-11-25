@@ -37,6 +37,7 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
       let video: HTMLVideoElement = this.video.nativeElement;
       video.src = this.source;
       video.play();
+      this.isRecording = false;
       this.isSourcePlaying = true;
     }else{
       this.initRecorder();
@@ -122,7 +123,8 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
 
 
   errorCallback() {
-    alert('No Media device found')
+    this.onSubmission.emit(false)
+    alert('Unable to detect Media device')
     //handle error here
   }
 

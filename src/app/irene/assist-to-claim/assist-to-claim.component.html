@@ -50,13 +50,16 @@
                 </button>
                 <input id='fileid' accept="images/*" style="display: none" type='file' hidden/>
             </li>
-          </ul>
+            <li *ngIf="userActions.goToDashboard" style="padding-top: 60px;text-align: center;" >
+              <a [routerLink]="['/dashboard']" class="btn btn-primary">GO TO DASHBOARD</a>
+            </li>
+            </ul>
         </div>
 
 
         <div class="message-input">
           <div class="wrap">
-            <input *ngIf="!userActions.selectPlace" [(ngModel)]="userInput" [disabled]="disableUserInput" type="text" placeholder="{{helpText}}" />
+            <input *ngIf="!userActions.selectPlace" [(ngModel)]="userInput" [disabled]="disableUserInput" type="text" id="userInputField" placeholder="{{helpText}}" />
             <input id="googleAutoComplete" *ngIf="userActions.selectPlace" [(ngModel)]="userInput" #search  type="text" placeholder="{{helpText}}" />
             <div id="dropMenu" *ngIf="userActions.dropDown" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
@@ -65,10 +68,10 @@
                 </li>
               </ul>
             </div>
-            <div *ngIf="claimDamageHow" id="claimHowSelect" class="dropup">
+            <div id="dropMenuAutoComplete" *ngIf="userActions.selectPlace" class="dropup">
               <ul [@zoomInUp1]="''" class="dropdown-menu">
-                <li *ngFor="let item of claimDamageHow">
-                  <a class="custom-drop" (click)="onSelectHowDamaged(item)" href="javascript:void(0)">{{item.label}}</a>
+                <li *ngFor="let item of locations">
+                  <a class="custom-drop" (click)="onSelectLocations(item)" href="javascript:void(0)">{{item}}</a>
                 </li>
               </ul>
             </div>

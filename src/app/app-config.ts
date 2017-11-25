@@ -1,5 +1,6 @@
 export const AppConfig = { 
-    'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
+    'apiBaseUrl': "/api/",
+    // 'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
     // 'apiBaseUrl': "http://localhost:3000/", // modify this to change API base url
     'defaultCurrency': 'IDR', // modify this to change currency
     'uploadFile': 'https://www.octerine.com/api/UploadUserDoc/'

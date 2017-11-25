@@ -35,9 +35,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
     
     ngOnInit() {
-      if(localStorage.getItem('userData')){
-        this.isLogged = true;
-      }
+      this.isLogged = false;
+      this.angularFire.authState.subscribe((authenticated)=>{
+        if(authenticated && localStorage.getItem('userData')){
+          this.isLogged = true;
+        }
+      })
+     
     }
     
     loginWithTwitter() {
@@ -110,32 +114,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
       .subscribe(data =>{
         this.loading = false;
         let response = data.Details[0];
+        if(!response.ProfileLink)
+          response.ProfileLink = 'https://firebasestorage.googleapis.com/v0/b/insureturn-1509529454175.appspot.com/o/girlie.png?alt=media&token=22cd090a-11d3-4ba4-b64e-5f33d1739530';
         localStorage.setItem('userData', JSON.stringify(response));
         this.router.navigate(['dashboard']);
       }, error=>{
-        let data = {
-          "Status": "EXISTS",
-          "Message": "User already exists",
-          "Details": [
-            {
-              "UserId": 10042,
-              "FirstName": "Test ",
-              "LastName": "Test ",
-              "MiddleName": "Test ",
-              "Email": "Test ",
-              "BirthDate": "1990-12-12T00:00:00",
-              "Location": "Trivandrum, India",
-              "Users_PhoneNumber": "Test ",
-              "Users_Passport": "Test ",
-              "Users_KTP": 1,
-              "ProfilePic": "https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/11863261_500169563470812_2778436704966522123_n.jpg?oh=5a4af55d5e319b3a8faf864dceefc06b&oe=5A815789",
-            }
-          ]
-        }
-        this.loading = false;
-        let response = data.Details[0];
-        localStorage.setItem('userData', JSON.stringify(response));
-        this.router.navigate(['dashboard']);
+        localStorage.clear();
+        this.message = "Unable to login"
       })
       
     }

@@ -3,7 +3,7 @@
   <video  #video class="video col-md-12"></video>
   <div class="video-controls">
     <button tooltip="Start" tooltipPlacement="top" 
-        *ngIf="!isRecording && !isRecordingCompleted" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="startRecording()"> 
+        *ngIf="!isRecording && !isRecordingCompleted && !isSourcePlaying" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="startRecording()"> 
         <i class="fa fa-3x fa-circle faa-passing-reverse"></i> 
     </button>
     <button tooltip="Stop" tooltipPlacement="top"  
@@ -24,7 +24,7 @@
     </button>
     <button tooltip="Close" tooltipPlacement="top"  
         *ngIf="isSourcePlaying" class="btn btn-default btn-circle btn-lg kupu-pink" (click)="stopAndClose()"> 
-        <i class="fa fa-3x fa-undo faa-passing-reverse"></i>
+        <i class="fa fa-3x fa-times faa-passing-reverse"></i>
     </button>
   </div>
 </div>

@@ -471,8 +471,7 @@ padding-right: 22px;
 
 .services-list .list{
 	background-color: #f4f4f4;
-	padding: 70px 20px;
-	margin-top: 30px;
+	padding: 30px;
 }
 
 .services-list .list:hover{
@@ -918,7 +917,7 @@ reviews-list img {
 
 .android-btn{
 
-width: 240px;
+width: 275px	;
 padding: 13px 17px 13px 0px;
 background-image: -webkit-linear-gradient(top, #fa3a61, #dd1746);
   	background-image: -moz-linear-gradient(top, #fa3a61, #dd1746);
