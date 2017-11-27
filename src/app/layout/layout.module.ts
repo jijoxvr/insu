@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from "@angular/router";
 import { FormsModule } from '@angular/forms';
+import { TooltipModule } from "ngx-tooltip";
+import { SharedModule } from "../shared/shared.module";
 
 import { LayoutRouting } from "./layout.routing"
 import { FooterComponent } from './footer/footer.component';
@@ -19,7 +21,9 @@ import { IreneModule } from "../irene/irene.module";
     RouterModule,
     DashboardModule,
     LayoutRouting,
-    IreneModule
+    IreneModule,
+    TooltipModule,
+    SharedModule
   ],
   declarations: [
     FooterComponent,

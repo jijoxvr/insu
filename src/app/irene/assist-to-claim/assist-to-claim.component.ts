@@ -8,7 +8,7 @@ import { AppLabels, APIUrls } from "../../app-config";
 import { trigger, transition, style, animate } from "@angular/animations";
 import { Observable } from 'rxjs/Observable';
 import { Uploader }      from 'angular2-http-file-upload';
-import { UploadFileService }  from '../../shared/ajax-api/upload-file.service';
+import { UploadModal }  from '../../shared/ajax-api/upload-file.service';
 import * as moment from "moment";
 import 'firebase/storage';
 import * as firebase from 'firebase/app';

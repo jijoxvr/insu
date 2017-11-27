@@ -1,6 +1,7 @@
 <div class="main-content">
     <div class="container-fluid">
-        <div class="row">
+        <app-loader *ngIf="loading"></app-loader>
+        <div *ngIf="!loading" class="row">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header" data-background-color="kupu-pink">
@@ -15,7 +16,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Fist Name</label>
-                                            <input #firstName="ngModel" required minlength="4" name="firstName" [(ngModel)]="userData.FirstName" type="text" class="form-control">
+                                            <input [disabled]="viewMode" #firstName="ngModel" required minlength="3" name="firstName" [(ngModel)]="userData.FirstName" type="text" class="form-control">
                                             <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="">
                                                 <div *ngIf="firstName.errors.required">
                                                     Name is required.
@@ -26,13 +27,13 @@
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Last Name</label>
-                                            <input name="lastName" [(ngModel)]="userData.LastName" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="lastName" [(ngModel)]="userData.LastName" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Phone Number</label>
-                                            <input name="postal" [(ngModel)]="userData.Users_PhoneNumber" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="phone" [(ngModel)]="userData.Users_PhoneNumber" type="text" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -40,19 +41,19 @@
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Birthday</label>
-                                            <input name="birthDay" [(ngModel)]="userData.BirthDateFormated" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="birthDay" [(ngModel)]="userData.BirthDateFormated" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Username</label>
-                                            <input name="userName" [(ngModel)]="userData.LastName" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="userName" [(ngModel)]="userData.LastName" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Email address</label>
-                                            <input name="email" [(ngModel)]="userData.Email" type="email" class="form-control">
+                                            <input [disabled]="viewMode" name="email" [(ngModel)]="userData.Email" type="email" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -61,13 +62,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Adress Line 1</label>
-                                            <input name="address" [(ngModel)]="userData.AddressLine" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="address" [(ngModel)]="userData.Users_AddressLine1" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Adress Line 2</label>
-                                            <input name="address1" [(ngModel)]="userData.AddressLine1" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="address1" [(ngModel)]="userData.Users_AddressLine2" type="text" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -76,19 +77,19 @@
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">City</label>
-                                            <input name="locality" [(ngModel)]="userData.Locality" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="locality" [(ngModel)]="userData.Users_Locality" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Country</label>
-                                            <input name="country" [(ngModel)]="userData.Country" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="country" [(ngModel)]="userData.Users_CountryName" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Postal Code</label>
-                                            <input name="postal" [(ngModel)]="userData.Postal" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="postal" [(ngModel)]="userData.Users_Postal" type="text" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -99,57 +100,51 @@
                                     <div class="col-md-4 col-xs-8">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">KTP No</label>
-                                            <input name="userId" [(ngModel)]="userData.UserId" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="userId" [(ngModel)]="userData.Users_KTP" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-xs-4">
-                                        <button (click)="triggerFileUpload('ktpFile')" data-toggle="tooltip" data-placement="top" title="Upload KTP" class="btn btn-default btn-circle btn-lg kupu-pink">
+                                        <button (click)="triggerFileUpload('ktpFile')" tooltip="Upload KTP" tooltipPlacement="top"  class="btn btn-default btn-circle btn-lg kupu-pink">
                                             <i class="fa fa-file"></i>
                                         </button>
-                                        <input id='ktpFile' accept="images/*" style="display: none" type='file' hidden/>
+                                        <input name="FileInput" id='ktpFile' accept="images/*" style="display: none" type='file' hidden/>
                                     </div>
                                     <div class="col-md-4 col-xs-8">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Id No</label>
-                                            <input name="ktpNo" [(ngModel)]="userData.Users_KTP" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="ktpNo" [(ngModel)]="userData.Users_Id" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-xs-4">
-                                        <button (click)="triggerFileUpload('idFile')" data-toggle="tooltip" data-placement="top" title="Upload ID" class="btn btn-default btn-circle btn-lg kupu-pink">
+                                        <button (click)="triggerFileUpload('idFile')" tooltip="Upload Id" tooltipPlacement="top"  class="btn btn-default btn-circle btn-lg kupu-pink">
                                             <i class="fa fa-file"></i>
                                         </button>
-                                        <input id='idFile' accept="images/*" style="display: none" type='file' hidden/>
+                                        <input name="FileInput" id='idFile' accept="images/*" style="display: none" type='file' hidden/>
                                     </div>
                                     <div class="col-md-4 col-xs-8">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Passport No</label>
-                                            <input name="passportNo" [(ngModel)]="userData.Users_Passport" type="text" class="form-control">
+                                            <input [disabled]="viewMode" name="passportNo" [(ngModel)]="userData.Users_Passport" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-xs-4">
                                         
-                                        <button (click)="triggerFileUpload('passportFile')" data-toggle="tooltip" data-placement="bottom" title="Upload Passport" class="btn btn-default btn-circle btn-lg kupu-pink">
+                                        <button (click)="triggerFileUpload('passportFile')" tooltip="Upload Passport" tooltipPlacement="bottom"  class="btn btn-default btn-circle btn-lg kupu-pink">
                                             <i class="fa fa-file"></i>
                                         </button>
-                                        <input id='passportFile' accept="images/*" style="display: none" type='file' hidden/>
+                                        <input id='passportFile' name="FileInput" accept="images/*" style="display: none" type='file' hidden/>
                                     </div>
                                 </div>
                             </fieldset>
-
-                            <!-- <div class="row">
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>About Me</label>
-                                        <div class="form-group form-black label-floating">
-                                            <label class="control-label"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                                            <textarea class="form-control" rows="5"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <button style="background-color: #ee366a" type="submit" class="btn btn-danger pull-right">Update Profile</button>
+                            <button (click)="viewMode = false" *ngIf="viewMode" tooltip="Edit" tooltipPlacement="bottom"  class="btn btn-default btn-circle btn-lg kupu-pink pull-right">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button (click)="submitProfile()" *ngIf="!viewMode" tooltip="Submit" tooltipPlacement="bottom"  title="Submit" class="btn btn-default btn-circle btn-lg kupu-pink pull-right">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            <button (click)="viewMode = true" *ngIf="!viewMode" tooltip="Cancel" tooltipPlacement="bottom"  title="Cancel" class="btn btn-default btn-circle btn-lg kupu-pink pull-right">
+                                <i class="fa fa-times"></i>
+                            </button>
                             <div class="clearfix"></div>
                         </form>
                     </div>

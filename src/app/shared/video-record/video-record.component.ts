@@ -30,7 +30,6 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    $('[data-toggle="tooltip"]').tooltip();
     
     // set the initial state of the video
     if(this.source){
@@ -68,7 +67,6 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
       audio: true
     })
     .then(this.successCallback.bind(this), this.errorCallback.bind(this));
-    $('[data-toggle="tooltip"]').tooltip();
   }
 
   toggleControls() {
@@ -148,7 +146,6 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     stream.getAudioTracks().forEach(track => track.stop());
     stream.getVideoTracks().forEach(track => track.stop());
     this.isRecordingCompleted = true;
-    $('[data-toggle="tooltip"]').tooltip();
   }
 
   submitRecording() {

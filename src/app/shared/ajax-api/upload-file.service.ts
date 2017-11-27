@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { UploadItem }    from 'angular2-http-file-upload';
 import { AppConfig } from "../../app-config"
 
-export class UploadFileService extends UploadItem{
+export class UploadModal extends UploadItem{
 
-  constructor(file: any) {
+  constructor(file: any, url:string) {
     super();
-    this.url = AppConfig.uploadFile;
+    this.url = AppConfig.apiBaseUrl + url;
     this.file = file;
   }
 

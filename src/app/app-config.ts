@@ -1,9 +1,8 @@
 export const AppConfig = { 
-    'apiBaseUrl': "/api/",
-    // 'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
-    // 'apiBaseUrl': "http://localhost:3000/", // modify this to change API base url
+    // 'apiBaseUrl': "/api/",
+    'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
+    // 'apiBaseUrl': "http://localhost:1475/", // modify this to change API base url
     'defaultCurrency': 'IDR', // modify this to change currency
-    'uploadFile': 'https://www.octerine.com/api/UploadUserDoc/'
 
 }
 
@@ -16,7 +15,8 @@ export const APIUrls = { // modify this only when service URL changes
     "addnewClaim": "submitForClaim/",
     "claimReason": "reasonForClaim/",
     "dashboardInfo": "dashboard/",
-    "getQuestion": "getquestion/"
+    "getQuestion": "getquestion/",
+    "uploadUserDoc": "UploadUserDocWeb/"
 }
 
 export const SvgIcons = {
