@@ -138,7 +138,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
       AnswerId: this.answerId,
       Claim_ManualInput: this.manualInput,
       AnswerList : this.answerList,
-      ClaimId : this.claimId,
+      Claim_Id : this.claimId,
       SqlId: this.userData.UserId
     }
     
@@ -150,7 +150,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
           this.answerId = data.QuestionId;
           this.answerList = [];
           this.manualInput = "";
-          this.claimId = data.ClaimId;
+          this.claimId = data.Claim_Id;
           this.processQuestion(data);
         }, delay) 
       }, error => {
