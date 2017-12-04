@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, NgZone } from 
 import { UserServiceService } from "../../core/user-service.service";
 import { MapsAPILoader } from '@agm/core';
 import { } from 'googlemaps';
+import { ChatService } from '../../shared/socket/chat.service';
 import { AppConfigService } from "../../core/app-config.service";
 import { AjaxService } from "../../shared/ajax-api/ajax.service";
 import { AppLabels, APIUrls } from "../../app-config";
@@ -112,7 +113,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   constructor(public userServiceService: UserServiceService,
     public ajaxService: AjaxService, private appConfigService: AppConfigService,
     private mapsAPILoader: MapsAPILoader,private ngZone: NgZone,
-    public uploaderService: Uploader) { 
+    public uploaderService: Uploader, private chat: ChatService) { 
       this.userServiceService.userObservable.subscribe(user => {
         this.userData = user;
       })
@@ -121,11 +122,18 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getQuestion(0);
+    this.chat.messages.subscribe(msg => {
+      console.log(msg);
+    })
   }
 
   ngAfterViewInit(): void{
     
     $('[data-toggle="tooltip"]').tooltip();
+  }
+
+  sendMessage(message) {
+    this.chat.sendMsg(message);
   }
 
 
@@ -141,7 +149,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
       Claim_Id : this.claimId,
       SqlId: this.userData.UserId
     }
-    
+    this.sendMessage(dataToServer);
     this.ajaxService.execute({body: dataToServer, method: 'POST', url:APIUrls.getQuestion}).
       subscribe(data => {
         let delay = moment.duration(moment().diff(bfTime)).asMilliseconds();

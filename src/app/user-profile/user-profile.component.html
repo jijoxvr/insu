@@ -107,7 +107,7 @@
                                         <button (click)="triggerFileUpload('ktpFile')" tooltip="Upload KTP" tooltipPlacement="top"  class="btn btn-default btn-circle btn-lg kupu-pink">
                                             <i class="fa fa-file"></i>
                                         </button>
-                                        <input name="FileInput" id='ktpFile' accept="images/*" style="display: none" type='file' hidden/>
+                                        <input data-type="2" name="FileInput" id='ktpFile' accept="images/*" style="display: none" type='file' hidden/>
                                     </div>
                                     <div class="col-md-4 col-xs-8">
                                         <div class="form-group form-black label-floating">
@@ -119,12 +119,12 @@
                                         <button (click)="triggerFileUpload('idFile')" tooltip="Upload Id" tooltipPlacement="top"  class="btn btn-default btn-circle btn-lg kupu-pink">
                                             <i class="fa fa-file"></i>
                                         </button>
-                                        <input name="FileInput" id='idFile' accept="images/*" style="display: none" type='file' hidden/>
+                                        <input data-type="3" name="FileInput" id='idFile' accept="images/*" style="display: none" type='file' hidden/>
                                     </div>
                                     <div class="col-md-4 col-xs-8">
                                         <div class="form-group form-black label-floating">
                                             <label class="control-label">Passport No</label>
-                                            <input [disabled]="viewMode" name="passportNo" [(ngModel)]="userData.Users_Passport" type="text" class="form-control">
+                                            <input  [disabled]="viewMode" name="passportNo" [(ngModel)]="userData.Users_Passport" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-xs-4">
@@ -132,7 +132,7 @@
                                         <button (click)="triggerFileUpload('passportFile')" tooltip="Upload Passport" tooltipPlacement="bottom"  class="btn btn-default btn-circle btn-lg kupu-pink">
                                             <i class="fa fa-file"></i>
                                         </button>
-                                        <input id='passportFile' name="FileInput" accept="images/*" style="display: none" type='file' hidden/>
+                                        <input data-type="1" id='passportFile' name="FileInput" accept="images/*" style="display: none" type='file' hidden/>
                                     </div>
                                 </div>
                             </fieldset>

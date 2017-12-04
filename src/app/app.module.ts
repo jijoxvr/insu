@@ -26,15 +26,9 @@ import { MasterResolver, UserResolver } from "./core/app-provider.service";
 import { UserServiceService } from "./core/user-service.service";
 
 import { LoginComponent } from './login/login.component';
+import { FirebaseConfig, GoogleMapConfig } from "./app-config";
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyDJDnfIoQlMg-IBn_m5wA_5QHcejP2Bszg",
-  authDomain: "insureturn-1509529454175.firebaseapp.com",
-  databaseURL: "https://insureturn-1509529454175.firebaseio.com",
-  projectId: "insureturn-1509529454175",
-  storageBucket: "insureturn-1509529454175.appspot.com",
-  messagingSenderId: "21098362152"
-};
+export const firebaseConfig = FirebaseConfig;
 
 @NgModule({
   declarations: [
@@ -52,10 +46,7 @@ export const firebaseConfig = {
     AppRouting,
     SharedModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AgmCoreModule.forRoot({
-      apiKey: "AIzaSyCA0wo7qYwenWNCWUsBhkmWGRQBI2CiqoM",
-      libraries: ["places"]
-    }),
+    AgmCoreModule.forRoot(GoogleMapConfig),
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 20,

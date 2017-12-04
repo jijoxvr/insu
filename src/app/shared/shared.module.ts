@@ -6,6 +6,8 @@ import { TooltipModule } from "ngx-tooltip";
 import { VideoRecordComponent } from './video-record/video-record.component';
 
 import { AjaxService } from "./ajax-api/ajax.service";
+import { WebSocketService } from "./socket/web-socket.service";
+import { ChatService } from "./socket/chat.service";
 import { JsonApiService } from "./ajax-api/json-api.service";
 import { WebStorageService } from "./ajax-api/web-storage.service";
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
@@ -32,6 +34,8 @@ import { LoaderComponent } from './loader/loader.component';
   providers:[
     AjaxService,
     JsonApiService,
+    WebSocketService,
+    ChatService,
     WebStorageService,
     CookieService,
     CurrencyPipe,

@@ -34,14 +34,15 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
 
   triggerFileUpload(id) {
     $('#' + id).click();
-    $('#' + id).change(()=>{
-      this.uploadFile(id)
+    $('#' + id).unbind('change');
+    $('#' + id).change((event)=>{
+      let type = $(event.target).attr('data-type');
+      this.uploadFile(id, type);
     })
   }
 
   editProfile() {
     this.viewMode = false;
-    
   }
 
   submitProfile(){
@@ -57,54 +58,50 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
       })
   }
 
-  uploadFile(id){
+  uploadFile(id, type?){
       let component = this;
-      var reader = new FileReader();
-      reader.onload = function() {
-        console.log(this.result)
-        let arrayBuffer = this.result;
-        let array = new Uint8Array(arrayBuffer);
-        let binaryString = String.fromCharCode.apply(null, array);
-        console.log(binaryString);
-        console.log('her')
-        let data = {
-          UserId: '10090',
-          DocumentName : 'test',
-          DocumentType : "1",
-          Document: array
-        }
-        component.ajaxService.execute({method: 'POST', body: binaryString, url: APIUrls.uploadUserDoc})
-          .subscribe(data=>{
-            console.log('here')
-          })
-      }
+      
       let uploadFile = (<HTMLInputElement>window.document.getElementById(id)).files[0];
-      // reader.readAsArrayBuffer(uploadFile);
+    
       
-      
-
       let myUploadItem = new UploadModal(uploadFile, APIUrls.uploadUserDoc);
       myUploadItem.formData = { 
-        UserId: '10090',
-        DocumentName : 'test',
-        DocumentType : "1",
+        DocumentUserId: component.userData.UserId,
+        DocumentType : type,
       };  // (optional) form data can be sent with file
-
+      
       this.uploaderService.onSuccessUpload = (item, response, status, headers) => {
           // success callback
-          console.log('here')
+          this.toogleLoader(id);
       };
       this.uploaderService.onErrorUpload = (item, response, status, headers) => {
           // error callback
-          console.log('h1')
+          this.toogleLoader(id);
       };
       this.uploaderService.onCompleteUpload = (item, response, status, headers) => {
           // complete callback, called regardless of success or failure
-          console.log('h2')
       };
-
+      this.uploaderService.onProgressUpload = (item, percentComplete) => {
+        // progress callback
+        // console.log(percentComplete)
+      };
+      this.toogleLoader(id);
       this.uploaderService.upload(myUploadItem);
   }
 
+  toogleLoader(id){
+    let element = $('#'+id).parent();
+    console.log(element.find('button'));
+    console.log(element.find('i'));
+    if(element.find('i').hasClass('fa-file')){
+      element.find('button').attr('disabled', true);
+      element.find('i').removeClass('fa-file');
+      element.find('i').addClass('fa-spinner fa-spin');
+    }else{
+      element.find('button').removeAttr('disabled');
+      element.find('i').removeClass('fa-spinner fa-spin');
+      element.find('i').addClass('fa-file');
+    }
+  }
 
 }

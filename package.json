@@ -45,6 +45,7 @@
     "perfect-scrollbar": "1.1.0",
     "recordrtc": "^5.4.5",
     "rxjs": "5.4.2",
+    "socket.io-client": "^2.0.4",
     "web-animations-js": "^2.3.1",
     "zone.js": "0.8.4"
   },

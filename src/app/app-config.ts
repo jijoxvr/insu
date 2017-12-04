@@ -1,9 +1,30 @@
 export const AppConfig = { 
     // 'apiBaseUrl': "/api/",
+    'chatSocket': "http://localhost:5000/",
     'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
     // 'apiBaseUrl': "http://localhost:1475/", // modify this to change API base url
     'defaultCurrency': 'IDR', // modify this to change currency
 
+}
+
+export const FirebaseConfig =  {
+    apiKey: "AIzaSyDJDnfIoQlMg-IBn_m5wA_5QHcejP2Bszg",
+    authDomain: "insureturn-1509529454175.firebaseapp.com",
+    databaseURL: "https://insureturn-1509529454175.firebaseio.com",
+    projectId: "insureturn-1509529454175",
+    storageBucket: "insureturn-1509529454175.appspot.com",
+    messagingSenderId: "21098362152"
+}
+
+export const FacebookConfig = {
+    appId: '1694965240568009',
+    xfbml: true,
+    version: 'v2.8'
+}
+
+export const GoogleMapConfig = {
+    apiKey: "AIzaSyCA0wo7qYwenWNCWUsBhkmWGRQBI2CiqoM",
+    libraries: ["places"]
 }
 
 export const APIUrls = { // modify this only when service URL changes
@@ -16,7 +37,7 @@ export const APIUrls = { // modify this only when service URL changes
     "claimReason": "reasonForClaim/",
     "dashboardInfo": "dashboard/",
     "getQuestion": "getquestion/",
-    "uploadUserDoc": "UploadUserDocWeb/"
+    "uploadUserDoc": "UploadUserDoc/"
 }
 
 export const SvgIcons = {

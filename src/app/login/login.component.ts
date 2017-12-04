@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Router } from "@angular/router";
 import { AjaxService } from '../shared/ajax-api/ajax.service';
-import { APIUrls } from '../app-config';
+import { APIUrls, FacebookConfig } from '../app-config';
 import * as moment from  "moment";
 import { FacebookService, InitParams, LoginOptions, LoginResponse } from 'ngx-facebook';
 declare var $: any;
@@ -25,11 +25,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   constructor(public angularFire: AngularFireAuth, private router: Router,
     private fb: FacebookService, private ajaxService: AjaxService) {
       
-      let initParams: InitParams = {
-        appId: '1694965240568009',
-        xfbml: true,
-        version: 'v2.8'
-      };
+      let initParams: InitParams = FacebookConfig;
       
       fb.init(initParams);
     }
@@ -83,6 +79,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       
       this.fb.login(loginOptions)
       .then((res: LoginResponse) => {
+        console.log(res)
         this.fetchDetails(res.authResponse.accessToken)
       })
       .catch(this.handleError);
