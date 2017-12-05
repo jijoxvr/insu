@@ -113,7 +113,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   constructor(public userServiceService: UserServiceService,
     public ajaxService: AjaxService, private appConfigService: AppConfigService,
     private mapsAPILoader: MapsAPILoader,private ngZone: NgZone,
-    public uploaderService: Uploader, private chat: ChatService) { 
+    public uploaderService: Uploader) { 
       this.userServiceService.userObservable.subscribe(user => {
         this.userData = user;
       })
@@ -122,9 +122,9 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getQuestion(0);
-    this.chat.messages.subscribe(msg => {
-      console.log(msg);
-    })
+    // this.chat.messages.subscribe(msg => {
+    //   console.log(msg);
+    // })
   }
 
   ngAfterViewInit(): void{
@@ -133,7 +133,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   }
 
   sendMessage(message) {
-    this.chat.sendMsg(message);
+    // this.chat.sendMsg(message);
   }
 
 
@@ -149,7 +149,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
       Claim_Id : this.claimId,
       SqlId: this.userData.UserId
     }
-    this.sendMessage(dataToServer);
+    // this.sendMessage(dataToServer);
     this.ajaxService.execute({body: dataToServer, method: 'POST', url:APIUrls.getQuestion}).
       subscribe(data => {
         let delay = moment.duration(moment().diff(bfTime)).asMilliseconds();
@@ -440,6 +440,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
         }, () => {
           // upload success.
           this.dataToServer.videoUrl = uploadTask.snapshot.downloadURL;
+          this.manualInput = uploadTask.snapshot.downloadURL;
           this.scrollChat();
           this.getQuestion(this.submitId, 'video submitted', true);
         }
@@ -464,6 +465,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
       }, () => {
         // upload success
         this.dataToServer.fir = uploadTask.snapshot.downloadURL;
+        this.manualInput = uploadTask.snapshot.downloadURL;
         this.scrollChat();
         this.getQuestion(this.submitId, uploadFile.name);
       }

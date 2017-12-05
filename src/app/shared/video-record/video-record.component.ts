@@ -23,11 +23,14 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
 
   @Input()
   public source: any;
-
+  public retry: boolean;
   @ViewChild('video') video;
-  constructor() { }
+  constructor() { 
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   ngAfterViewInit() {
     
@@ -39,6 +42,7 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
       this.isRecording = false;
       this.isSourcePlaying = true;
     }else{
+      this.retry = false;
       this.initRecorder();
     }
     
@@ -77,17 +81,18 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     let video: HTMLVideoElement = this.video.nativeElement;
     video.play();    
   }
-
+  
   recordAgain(){
     this.isRecording = false;
     this.isRecordingCompleted = false;
+    this.retry = true;
     this.initRecorder();
     this.timer = 0;
   }
 
   successCallback(stream: MediaStream) {
     var options = {
-      mimeType: 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
+      mimeType: 'video/webm;codecs=h264', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
       audioBitsPerSecond: 128000,
       videoBitsPerSecond: 128000,
       bitsPerSecond: 128000 // if this line is provided, skip above two
@@ -96,6 +101,8 @@ export class VideoRecordComponent implements OnInit, AfterViewInit {
     this.recordRTC = RecordRTC(stream, options);
     let video: HTMLVideoElement = this.video.nativeElement;
     video.src = window.URL.createObjectURL(this.stream);
+    if(this.retry)
+      this.startRecording();
   }
   timer = 0;
   counter : any; 

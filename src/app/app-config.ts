@@ -1,6 +1,6 @@
 export const AppConfig = { 
     // 'apiBaseUrl': "/api/",
-    'chatSocket': "http://localhost:5000/",
+    'chatSocket': "https://localhost:5000/",
     'apiBaseUrl': "https://www.octerine.com/api/", // modify this to change API base url
     // 'apiBaseUrl': "http://localhost:1475/", // modify this to change API base url
     'defaultCurrency': 'IDR', // modify this to change currency
