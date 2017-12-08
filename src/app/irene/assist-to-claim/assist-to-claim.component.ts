@@ -113,7 +113,9 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
   constructor(public userServiceService: UserServiceService,
     public ajaxService: AjaxService, private appConfigService: AppConfigService,
     private mapsAPILoader: MapsAPILoader,private ngZone: NgZone,
-    public uploaderService: Uploader) { 
+    public uploaderService: Uploader,
+    //  private chat: ChatService
+    ) { 
       this.userServiceService.userObservable.subscribe(user => {
         this.userData = user;
       })
@@ -149,7 +151,7 @@ export class AssistToClaimComponent implements OnInit, AfterViewInit {
       Claim_Id : this.claimId,
       SqlId: this.userData.UserId
     }
-    // this.sendMessage(dataToServer);
+    this.sendMessage(dataToServer);
     this.ajaxService.execute({body: dataToServer, method: 'POST', url:APIUrls.getQuestion}).
       subscribe(data => {
         let delay = moment.duration(moment().diff(bfTime)).asMilliseconds();
